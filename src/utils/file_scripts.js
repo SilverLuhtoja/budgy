@@ -10,7 +10,7 @@ import {
 const BASE_PATH = '.';
 const ORGINAL_FILE_BATH = `${BASE_PATH}/resources/original_files`;
 const PROCESSED_FILE_BATH = `${BASE_PATH}/resources/processed_files`;
-const OPTIONS_FILE_BATH = `${BASE_PATH}/resources/options`;
+export const OPTIONS_FILE_BATH = `${BASE_PATH}/resources/configurations`;
 
 const getFileName = path => {
   let splitted = path.split('/');

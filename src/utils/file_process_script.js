@@ -1,10 +1,64 @@
+import { OPTIONS_FILE_BATH, readFileContents } from './file_scripts';
+
+const FILTERS_FILE_PATH = OPTIONS_FILE_BATH + '/filter_options.json';
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
-const NO_OPTIONS_SELECTED_INFO= 'INFO: No options selected';
+const NO_COLUMN_ERROR = 'ERROR: No column available';
+const NO_OPTIONS_SELECTED_INFO = 'INFO: No options selected';
+const FILTER_PAYMENT_DESCRIPTION = 'Selgitus';
+const FILTER_RECEIVER_PAYER = 'Saaja/Maksja';
+const FILTER_SUM_VALUE = 'Summa';
+const FILTER_DEBIT_CREDIT = 'Deebet/Kreedit';
 
-const seperateByCategories = () => {
+const COLUMN_OPTIONS = ['Kuupäev', 'Saaja/Maksja', 'Selgitus', 'Summa', 'Deebet/Kreedit'];
 
+// fileContent is array of lines
+const processStatment = async fileContent => {
+  const removedColumnContent = processColumnSelection(fileContent, COLUMN_OPTIONS);
+  let filteredByCategoryContent = await filterExpenses(removedColumnContent);
+  return filteredByCategoryContent;
+};
+
+const filterExpenses = async data => {
+  const optionsData =JSON.parse( await readFileContents(FILTERS_FILE_PATH));
+  let entries = Object.entries(optionsData);
+  let SumUpCategories = {};
+  const receiverPayerIdx = getColumnIndex(data[0], FILTER_RECEIVER_PAYER);
+  const explanationIdx = getColumnIndex(data[0], FILTER_PAYMENT_DESCRIPTION);
+  const sumIdx = getColumnIndex(data[0], FILTER_SUM_VALUE);
+  const debetIdx = getColumnIndex(data[0], FILTER_DEBIT_CREDIT);
+
+
+  for (let i = 1; i < data.length; i++) {
+    for (const [key, values] of entries) {
+      if (isMatch(values, data[i], [explanationIdx, receiverPayerIdx]) && values.length > 0) {
+        let number = Number(data[i][sumIdx]);
+        if (data[i][debetIdx] == 'K' && key != 'INCOME') {
+          number = -number;
+        }
+
+        if (!SumUpCategories[key]) {
+          SumUpCategories[key] = {
+            total: 0,
+            details: [],
+          };
+        }
+
+        SumUpCategories[key]['total'] += number;
+        SumUpCategories[key]['details'].push(data[i]);
+      }
+    }
+  }
+
+   return SumUpCategories;
+};
+
+function isMatch(values, data_row, filterIndexes) {
+  const pattern = new RegExp(`\\b(${values.join('|')})\\b`, 'i');
+  if (pattern.test(data_row[filterIndexes[0]]) || pattern.test(data_row[filterIndexes[1]])) {
+    return true;
+  }
+  return false;
 }
-
 
 const processColumnSelection = (lines, columnOptions) => {
   const newContent = [columnOptions];
@@ -14,8 +68,8 @@ const processColumnSelection = (lines, columnOptions) => {
 
   const indexes = getColumnIndexes(firstLineColumns, columnOptions);
   for (let i = 1; i < lines.length; i++) {
-    if (lines[i] == "") {
-      continue
+    if (lines[i] == '') {
+      continue;
     }
     let filteredContent = [];
     let choppedLine = lines[i].split(',');
@@ -37,6 +91,16 @@ const replaceCommasInsideQuotes = line => {
     // Replace commas within the matched section
     return match.replace(/,/g, ';');
   });
+};
+
+const getColumnIndex = (fileColumns, columnName) => {
+  for (let i = 0; i < fileColumns.length; i++) {
+    if (fileColumns[i] == columnName) {
+      return i;
+    }
+  }
+
+  throw NO_COLUMN_ERROR;
 };
 
 const getColumnIndexes = (fileColumns, givenOptions) => {
@@ -63,4 +127,4 @@ const isValidOptions = (fileColumns, givenOptions) => {
   return true;
 };
 
-export { processColumnSelection };
+export { processColumnSelection, processStatment };

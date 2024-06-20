@@ -11,6 +11,9 @@ const props = defineProps(['content'])
         <div v-if="props.content && props.content.length && Array.isArray(props.content)" v-for="line,idx in props.content" :key="idx">
             {{ line }}
         </div>
+        <div v-else>
+            {{ props.content }}
+        </div>
     </div>
 </template>
 
