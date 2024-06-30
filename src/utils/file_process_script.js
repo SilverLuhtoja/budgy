@@ -21,14 +21,15 @@ const processStatment = async fileContent => {
 const filterExpenses = async data => {
   const optionsData =JSON.parse( await readFileContents(FILTERS_FILE_PATH));
   let entries = Object.entries(optionsData);
+  let not_filtered_list = []
   let SumUpCategories = {};
   const receiverPayerIdx = getColumnIndex(data[0], FILTER_RECEIVER_PAYER);
   const explanationIdx = getColumnIndex(data[0], FILTER_PAYMENT_DESCRIPTION);
   const sumIdx = getColumnIndex(data[0], FILTER_SUM_VALUE);
   const debetIdx = getColumnIndex(data[0], FILTER_DEBIT_CREDIT);
 
-
   for (let i = 1; i < data.length; i++) {
+    let pushed = false
     for (const [key, values] of entries) {
       if (isMatch(values, data[i], [explanationIdx, receiverPayerIdx]) && values.length > 0) {
         let number = Number(data[i][sumIdx]);
@@ -44,12 +45,31 @@ const filterExpenses = async data => {
         }
 
         SumUpCategories[key]['total'] += number;
+        SumUpCategories[key]['total'] = roundUpToDecimals(SumUpCategories[key]['total'], 2)
         SumUpCategories[key]['details'].push(data[i]);
+        pushed = true
+        break;
       }
+    }
+
+    if(!pushed){
+      not_filtered_list.push(data[i]);
     }
   }
 
+  not_filtered_list = removeExtraFields(not_filtered_list)
+  if (not_filtered_list.length > 0){
+    SumUpCategories['not_filtered'] = {
+      details: not_filtered_list,
+    };
+  }
+
    return SumUpCategories;
+};
+
+const roundUpToDecimals = (num, decimals) => {
+  const factor = Math.pow(10, decimals);
+  return Math.ceil(num * factor) / factor;
 };
 
 function isMatch(values, data_row, filterIndexes) {
@@ -119,12 +139,18 @@ const getColumnIndexes = (fileColumns, givenOptions) => {
 const isValidOptions = (fileColumns, givenOptions) => {
   givenOptions.forEach(column => {
     if (!fileColumns.includes(column)) {
-      console.log(column);
       return false;
     }
   });
 
   return true;
+};
+
+const removeExtraFields = list => {
+  if (list.length <= 4) {
+    return [];
+  }
+  return list.slice(1, -3);
 };
 
 export { processColumnSelection, processStatment };
