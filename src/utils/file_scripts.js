@@ -5,11 +5,12 @@ import {
   createDir,
   copyFile,
   readDir,
+  writeFile,
 } from '@tauri-apps/api/fs';
 
 const BASE_PATH = '.';
-const ORGINAL_FILE_BATH = `${BASE_PATH}/resources/original_files`;
-const PROCESSED_FILE_BATH = `${BASE_PATH}/resources/processed_files`;
+export const ORGINAL_FILE_BATH = `${BASE_PATH}/resources/original_files`;
+export const PROCESSED_FILE_BATH = `${BASE_PATH}/resources/processed_files`;
 export const OPTIONS_FILE_BATH = `${BASE_PATH}/resources/configurations`;
 
 const getFileName = path => {
@@ -39,6 +40,32 @@ const createFile = async source_path => {
   }
 };
 
+const saveProcessFile = async (source_path, fileContent) => {
+  if (!source_path) return
+  const destination_path = PROCESSED_FILE_BATH + '/' + source_path;
+  const isOriginalFile = await exists(destination_path);
+
+  if (isOriginalFile) {
+    const answer = await ask(
+      `File ${getFileName(
+        source_path
+      )} is already present in destination. Would you like to overwrite it ?`,
+      { type: 'info', okLabel: 'Yes', cancelLabel: 'No' }
+    );
+    if (!answer) return;
+  }
+
+
+  try {
+    await writeFile({
+      path: destination_path,
+      contents: JSON.stringify(fileContent, null, 2),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const readFileContents = async (path = null) => {
 
   try {
@@ -61,21 +88,27 @@ const readFileContents = async (path = null) => {
   }
 };
 
-const createOriginalDir = async () => {
+const createDirPath = async dir_path => {
   try {
-    const isOriginalDir = await exists(ORGINAL_FILE_BATH);
+    const isOriginalDir = await exists(dir_path);
     if (isOriginalDir) return;
 
-    await createDir(ORGINAL_FILE_BATH, { recursive: true });
-    console.log('directory created : ', ORGINAL_FILE_BATH);
+    await createDir(dir_path, { recursive: true });
+    console.log('directory created : ', dir_path);
   } catch (err) {
     console.error(err);
   }
 };
 
-const readOriginalDir = async () => {
-  const files = await readDir(ORGINAL_FILE_BATH);
-  return files
+const readDirPath = async dir_path => {
+  const files = await readDir(dir_path);
+  return files;
 };
 
-export { readFileContents, createOriginalDir, readOriginalDir };
+export {
+  readFileContents,
+  createDirPath,
+  readDirPath,
+  saveProcessFile,
+  getFileName,
+};

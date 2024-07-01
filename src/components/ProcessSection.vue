@@ -4,11 +4,13 @@ import {
   processColumnSelection,
   processStatment
 } from '../utils/file_process_script';
+import { saveProcessFile } from '../utils/file_scripts';
 
 const props = defineProps([
   'fileContent',
   'showOnViewSection',
   'switchProcessClicked',
+  'processedFilename'
 ]);
 const columnOptions = ref('');
 
@@ -30,8 +32,9 @@ const filterSelectedColumns = () => {
 const processFile = async () => {
   let content = await processStatment(props.fileContent);
 
-  // content = "does this also work"
   props.showOnViewSection(content);
+  console.log(content);
+  saveProcessFile(props.processedFilename, content)
 };
 
 onMounted(() => {

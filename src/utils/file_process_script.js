@@ -64,7 +64,7 @@ const filterExpenses = async data => {
     };
   }
 
-   return SumUpCategories;
+  return SumUpCategories;
 };
 
 const roundUpToDecimals = (num, decimals) => {

@@ -30,7 +30,16 @@
         "removeDir": false,
         "removeFile": false,
         "renameFile": false,
-        "scope": ["**", "**/*", "/**/*","./resources", "./resources/original_files","./resources/original_files/*"],
+        "scope": [
+          "**",
+          "**/*",
+          "/**/*",
+          "./resources",
+          "./resources/original_files",
+          "./resources/original_files/*",
+          "./resources/processed_files",
+          "./resources/processed_files/*"
+        ],
         "writeFile": true
       },
       "shell": {

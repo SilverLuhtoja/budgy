@@ -10,9 +10,10 @@ const isPlainObject = (value) => {
 const toggleDetails = (category) => {
     if (visibleDetails.value.includes(category)) {
         visibleDetails.value = visibleDetails.value.filter(item => item !== category);
-    } else {
-        visibleDetails.value.push(category);
-    }
+        return
+    } 
+    
+    visibleDetails.value.push(category);
 };
 
 const closeVisibleDetails = () => { visibleDetails.value = []}
@@ -31,6 +32,7 @@ const openDetails = () => {
             {{ line }}
         </div>
         <div v-else >
+            <!-- TODO: REFACTOR TO SEPRATE COMOPONENT -->
             <div v-if="isPlainObject(props.content)">
                 <div class="flex">
                     <button @click="closeVisibleDetails">Close All Details</button>
@@ -52,7 +54,7 @@ const openDetails = () => {
                     </div>
                 </div>
             </div>
-            <div v-else> {{ props.content }} </div>
+            <pre v-else> {{ props.content }} </pre>
         </div>
     </div>
 </template>

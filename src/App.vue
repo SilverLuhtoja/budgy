@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { createOriginalDir, readOriginalDir } from './utils/file_scripts';
+import { ORGINAL_FILE_BATH, PROCESSED_FILE_BATH, createDirPath, readDirPath } from './utils/file_scripts';
 import FileSection from "./components/FileSection.vue";
 import ViewSection from "./components/ViewSection.vue";
 
 const originalFiles = ref('');
+const processedFiles = ref('');
 const content = ref('');
 
 const showOnViewSection = (someContent) => {
@@ -12,8 +13,10 @@ const showOnViewSection = (someContent) => {
 }
 
 onMounted(async () => {
-  await createOriginalDir();
-  originalFiles.value = await readOriginalDir();
+  await createDirPath(ORGINAL_FILE_BATH);
+  await createDirPath(PROCESSED_FILE_BATH);
+  originalFiles.value = await readDirPath(ORGINAL_FILE_BATH);
+  processedFiles.value = await readDirPath(PROCESSED_FILE_BATH);
 
   document.addEventListener('keypress', e => {
     if (e.key == 'Escape') {
@@ -26,7 +29,9 @@ onMounted(async () => {
 <template>
   <div class="container">
     <div class="row">
-      <FileSection :originalFiles="originalFiles" :showOnViewSection="showOnViewSection"/>
+      <FileSection :originalFiles="originalFiles" 
+      :processedFiles="processedFiles" 
+      :showOnViewSection="showOnViewSection"/>
       <ViewSection :content="content"/>
     </div>
   </div>
@@ -40,7 +45,5 @@ onMounted(async () => {
 
 .row {
   display: flex;
-  /* justify-content: center; */
 }
-
 </style>
