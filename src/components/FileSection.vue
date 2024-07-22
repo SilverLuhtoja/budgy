@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, defineProps, ref } from 'vue';
 import { getFileName, readFileContents } from '../utils/file_scripts';
 import ProcessSection from '../components/ProcessSection.vue';
+import FileSection from '../components/FileSelection.vue';
 
 const props = defineProps(['originalFiles', 'processedFiles', 'showOnViewSection']);
 const currentlySelectedFile = ref('');
@@ -9,20 +10,25 @@ const processClicked = ref(false);
 const fileContent = ref('');
 const processedFilename = ref('')
 
-const readFile = async (path = null, filename) => {
+const readFile = async (path, filename) => {
   currentlySelectedFile.value = filename;
   let content = await readFileContents(path);
+  
+  if (!path) return
 
   if (!path.includes("processed_files")) {
     fileContent.value = content.split("\n");
   }else{
     fileContent.value = JSON.parse(content)
   }
+
   processedFilename.value = getFileName(path).split('.')[0]
   props.showOnViewSection(fileContent.value);
 };
 
 const onClickOutside = e => {
+  if (e.target.tagName == "BUTTON") return
+
   const notProcessedFile = currentlySelectedFile.value.split('.').length != 1
   if (!e.target.classList.contains('file') && !processClicked.value && notProcessedFile) {
     currentlySelectedFile.value = '';
@@ -51,42 +57,17 @@ onUnmounted(() => {
 <template>
   <div class="file_panel">
     <div class="flex">
-      <button v-if="!processClicked" @click="readFile()">choose a file</button>
+      <button v-if="!processClicked" @click="readFile()">+ FILE</button>
       <button v-if="currentlySelectedFile && isCSVFile()" @click="switchProcessClicked">
         Process
       </button>
+      <button v-if="!processClicked">~ Options</button>
     </div>
 
-    <div v-if="!processClicked"> 
-      <p>Original files:</p>
-      <div
-        v-if="props.originalFiles.length"
-        v-for="file in props.originalFiles"
-        :key="file.name"
-      >
-        <p
-          :class="{ selected: currentlySelectedFile === file.name }"
-          class="file"
-          @click="readFile(file.path, file.name)"
-        >
-          |_ {{ file.name }}
-        </p>
-      </div>
-      <p v-else>no files</p>
-
-      <div v-if="props.processedFiles.length"> 
-        <p>Processed files:</p>
-        <div v-for="file in props.processedFiles" :key="file.name">
-          <p
-            :class="{ selected: currentlySelectedFile === file.name }"
-            class="file"
-            @click="readFile(file.path, file.name)"
-          >
-            |_ {{ file.name }}
-          </p>
-        </div>
-      </div>
-    </div>
+    <section v-if="!processClicked"> 
+      <FileSection :sectionName="`ORIGINAL`" :files="props.originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSection :sectionName="`PROCESSED`" :files="props.processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+    </section>
 
     <div v-if="processClicked">
       <ProcessSection
@@ -100,25 +81,12 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.flex {
-  display: flex;
-}
-.file {
-  padding: 0.25em 1em;
-}
-
-.selected {
-  background: rgb(216, 169, 169);
-}
-.file:hover {
-  cursor: grab;
-  background: rgb(173, 135, 135);
-}
-
 .file_panel {
   min-width: 300px;
   height: 100vh;
-  background: salmon;
+  background: rgba(57,66,60);
+  color: white;
+  padding: 1em;
 }
 
 .file_panel button {
