@@ -1,5 +1,10 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import OptionsSection from './OptionsSection.vue'
+
+const store = useStore();
+const currentView = computed(() => store.getters.currentView)
 
 const props = defineProps(['content'])
 const visibleDetails = ref([]);
@@ -27,13 +32,14 @@ const openDetails = () => {
 
 <template>
     <div class="view_panel">
-        <h1> View Window </h1> 
-        <div v-if="props.content && props.content.length && Array.isArray(props.content)" v-for="line,idx in props.content" :key="idx">
-            {{ line }}
-        </div>
-        <div v-else >
-            <!-- TODO: REFACTOR TO SEPRATE COMOPONENT -->
-            <div v-if="isPlainObject(props.content)">
+        <section v-if="currentView == 'default'">
+            <h1> View Window </h1>
+            <div v-if="props.content && props.content.length && Array.isArray(props.content)" v-for="line,idx in props.content" :key="idx">
+                {{ line }}
+            </div>
+            <div v-else >
+                <!-- TODO: REFACTOR TO SEPRATE COMOPONENT -->
+                <div v-if="isPlainObject(props.content)">
                 <div class="flex">
                     <button @click="closeVisibleDetails">Close All Details</button>
                     <button @click="openDetails">Open All Details</button>
@@ -53,9 +59,13 @@ const openDetails = () => {
                         </div>
                     </div>
                 </div>
+                </div>
+                <pre v-else> {{ props.content }} </pre>
             </div>
-            <pre v-else> {{ props.content }} </pre>
-        </div>
+        </section>
+        <section v-if="currentView == 'options'">
+            <OptionsSection />
+        </section>
     </div>
 </template>
 

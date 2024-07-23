@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { ORGINAL_FILE_BATH, PROCESSED_FILE_BATH, createDirPath, readDirPath } from './utils/file_scripts';
+import { ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, createDirPath, readDirPath } from './utils/file_scripts';
 import FileSection from "./components/FileSection.vue";
 import ViewSection from "./components/ViewSection.vue";
 
@@ -13,10 +13,10 @@ const showOnViewSection = (someContent) => {
 }
 
 onMounted(async () => {
-  await createDirPath(ORGINAL_FILE_BATH);
-  await createDirPath(PROCESSED_FILE_BATH);
-  originalFiles.value = await readDirPath(ORGINAL_FILE_BATH);
-  processedFiles.value = await readDirPath(PROCESSED_FILE_BATH);
+  await createDirPath(ORGINAL_FILE_PATH);
+  await createDirPath(PROCESSED_FILE_PATH);
+  originalFiles.value = await readDirPath(ORGINAL_FILE_PATH);
+  processedFiles.value = await readDirPath(PROCESSED_FILE_PATH);
 
   document.addEventListener('keypress', e => {
     if (e.key == 'Escape') {

@@ -8,10 +8,9 @@ import {
   writeFile,
 } from '@tauri-apps/api/fs';
 
-const BASE_PATH = '.';
-export const ORGINAL_FILE_BATH = `${BASE_PATH}/resources/original_files`;
-export const PROCESSED_FILE_BATH = `${BASE_PATH}/resources/processed_files`;
-export const OPTIONS_FILE_BATH = `${BASE_PATH}/resources/configurations`;
+export const ORGINAL_FILE_PATH = `./resources/original_files`;
+export const PROCESSED_FILE_PATH = `./resources/processed_files`;
+export const CONFIGURATIONS_FILE_PATH = `./resources/configurations/configurations.json`;
 
 const getFileName = path => {
   let splitted = path.split('/');
@@ -19,11 +18,11 @@ const getFileName = path => {
 };
 
 const getFileNameInOriginalDir = path => {
-  return ORGINAL_FILE_BATH + '/' + getFileName(path);
+  return ORGINAL_FILE_PATH + '/' + getFileName(path);
 };
 
 const createFile = async source_path => {
-  const destination_path = ORGINAL_FILE_BATH + '/' + getFileName(source_path);
+  const destination_path = ORGINAL_FILE_PATH + '/' + getFileName(source_path);
   const isOriginalFile = await exists(destination_path);
   if (isOriginalFile) {
     const answer = await ask(
@@ -42,7 +41,7 @@ const createFile = async source_path => {
 
 const saveProcessFile = async (source_path, fileContent) => {
   if (!source_path) return
-  const destination_path = PROCESSED_FILE_BATH + '/' + source_path;
+  const destination_path = PROCESSED_FILE_PATH + '/' + source_path;
   const isOriginalFile = await exists(destination_path);
 
   if (isOriginalFile) {
@@ -65,6 +64,29 @@ const saveProcessFile = async (source_path, fileContent) => {
     console.error(err);
   }
 };
+
+const getConfigurations = async () => {
+  let isCreated = await exists(CONFIGURATIONS_FILE_PATH);
+  if (!isCreated) {
+    await writeFile({
+      path: CONFIGURATIONS_FILE_PATH,
+      contents: JSON.stringify({}, null, 2),
+    });
+    return;
+  }
+  return await readTextFile(CONFIGURATIONS_FILE_PATH);
+}
+
+const saveConfigurationFile = async (configurations) => {
+  try {
+    await writeFile({
+      path: CONFIGURATIONS_FILE_PATH,
+      contents: JSON.stringify(configurations, null, 2),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 const readFileContents = async (path = null) => {
 
@@ -111,4 +133,6 @@ export {
   readDirPath,
   saveProcessFile,
   getFileName,
+  getConfigurations,
+  saveConfigurationFile,
 };

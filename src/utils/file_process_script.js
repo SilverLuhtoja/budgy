@@ -1,6 +1,6 @@
-import { OPTIONS_FILE_BATH, readFileContents } from './file_scripts';
+import { readFileContents } from './file_scripts';
 
-const FILTERS_FILE_PATH = OPTIONS_FILE_BATH + '/filter_options.json';
+const CONFIGURATIONS_FILE_PATH = './resources/configurations/filter_options.json';
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
 const NO_OPTIONS_SELECTED_INFO = 'INFO: No options selected';
@@ -19,7 +19,7 @@ const processStatment = async fileContent => {
 };
 
 const filterExpenses = async data => {
-  const optionsData =JSON.parse( await readFileContents(FILTERS_FILE_PATH));
+  const optionsData =JSON.parse( await readFileContents(CONFIGURATIONS_FILE_PATH));
   let entries = Object.entries(optionsData);
   let not_filtered_list = []
   let SumUpCategories = {};

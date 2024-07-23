@@ -3,6 +3,9 @@ import { onMounted, onUnmounted, defineProps, ref } from 'vue';
 import { getFileName, readFileContents } from '../utils/file_scripts';
 import ProcessSection from '../components/ProcessSection.vue';
 import FileSection from '../components/FileSelection.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const props = defineProps(['originalFiles', 'processedFiles', 'showOnViewSection']);
 const currentlySelectedFile = ref('');
@@ -61,7 +64,7 @@ onUnmounted(() => {
       <button v-if="currentlySelectedFile && isCSVFile()" @click="switchProcessClicked">
         Process
       </button>
-      <button v-if="!processClicked">~ Options</button>
+      <button v-if="!processClicked" @click="store.dispatch('setCurrentView', 'options')">~ Options</button>
     </div>
 
     <section v-if="!processClicked"> 
