@@ -3,12 +3,36 @@ import { onMounted,ref } from 'vue';
 import { saveConfigurationFile, getConfigurations } from '../utils/file_scripts';
 
 const configurations = ref(null)
+const category_name = ref("");
+
 const onSaveHandler = () => {
-    saveConfigurationFile()
+    const savedConfigurations = {};
+    for (const key in configurations.value) {
+        if (!configurations.value[key] == "") {
+            savedConfigurations[key] = configurations.value[key].split(',').map(item => item.trim());
+        }else{
+            savedConfigurations[key] = []
+        }
+    }
+    saveConfigurationFile(savedConfigurations);
+}
+
+const removeCategoryHandler = (category) => {
+    delete configurations.value[category];
+}
+
+const addCategoryHandler = () => {
+    if (!configurations.value[category_name]) {
+        configurations.value[category_name.value] = []
+    }
+    category_name.value = ""
 }
 
 onMounted( async () => {
-    configurations.value = await getConfigurations()
+    configurations.value = JSON.parse(await getConfigurations())
+     for (const key in configurations.value ) {
+        configurations.value[key] = configurations.value [key].join(', ');
+    }
 })
 </script>
 
@@ -16,13 +40,59 @@ onMounted( async () => {
     <section>
         <h1> Filter Configuration Page </h1>
 
-        <div>
-            {{ configurations }}
+        <div class="add_category_wrapper">
+            <input v-model="category_name" placeholder="Enter a category name..." />
+            <button @click="addCategoryHandler">add category</button>
         </div>
 
-        <button @click="onSaveHandler" > SAVE </button>
+        <div class="flex category" v-for="(value,key) in configurations" :key="key">
+            <div class="flex center category_key">
+                <button class="remove_category_btn" @click="removeCategoryHandler(key)" > x </button>
+                <div class="key"> {{ key }}</div>
+            </div>
+            <textarea  v-model="configurations[key]" class="value"></textarea>
+        </div>
+
+        <button class="save_btn" @click="onSaveHandler" > SAVE </button>
     </section>
 </template>
 
 <style scoped>
+.flex{
+    display: flex;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.category{
+    padding:0.5em 1em;
+    background-color: antiquewhite;
+    border-bottom: 2px solid rgb(250, 215, 169);
+}
+.category_key{
+    padding: 0.5em;
+}
+
+.value {
+    margin-left: 2em;
+    padding: 0.5em;
+}
+
+.save_btn{
+    background: rgb(139, 212, 139);
+    padding: 0.5em;
+}
+
+.remove_category_btn{
+    padding: 0 0.25em;
+    margin-right:  0.5em;
+    background: rgb(226, 121, 35);
+}
+
+.add_category_wrapper{
+    margin:  0.5em 0.25em;
+}
 </style>

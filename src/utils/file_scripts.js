@@ -21,7 +21,7 @@ const getFileNameInOriginalDir = path => {
   return ORGINAL_FILE_PATH + '/' + getFileName(path);
 };
 
-const createFile = async source_path => {
+const createOriginalFile = async source_path => {
   const destination_path = ORGINAL_FILE_PATH + '/' + getFileName(source_path);
   const isOriginalFile = await exists(destination_path);
   if (isOriginalFile) {
@@ -78,6 +78,8 @@ const getConfigurations = async () => {
 }
 
 const saveConfigurationFile = async (configurations) => {
+  if (configurations === '' || configurations === undefined) return;
+
   try {
     await writeFile({
       path: CONFIGURATIONS_FILE_PATH,
@@ -89,7 +91,6 @@ const saveConfigurationFile = async (configurations) => {
 }
 
 const readFileContents = async (path = null) => {
-
   try {
     if (path != null) {
         return await readTextFile(path);
@@ -103,7 +104,7 @@ const readFileContents = async (path = null) => {
 
     if (!selectedPath) return;
 
-    await createFile(selectedPath);
+    await createOriginalFile(selectedPath);
     return await readTextFile(getFileNameInOriginalDir(selectedPath));
   } catch (err) {
     console.error(err);
