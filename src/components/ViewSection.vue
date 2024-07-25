@@ -41,8 +41,9 @@ const openDetails = () => {
                 <!-- TODO: REFACTOR TO SEPRATE COMOPONENT -->
                 <div v-if="isPlainObject(props.content)">
                 <div class="flex">
-                    <button @click="closeVisibleDetails">Close All Details</button>
-                    <button @click="openDetails">Open All Details</button>
+                    <button class="option_btn" @click="closeVisibleDetails">Close All Details</button>
+                    <button class="option_btn" @click="openDetails">Open All Details</button>
+                    <p class="info">Shift+A to quick save highlighted text to options</p>
                 </div>
                 <div class="category_card" v-for="[category, value] in Object.entries(props.content)" :key="category">
                     <div class="flex">
@@ -84,5 +85,15 @@ const openDetails = () => {
     margin: 1em 0.3em;
     padding: 0.25em;
     background: rgb(189, 189, 189);
+}
+
+.option_btn{
+    margin: 0 0.3em;
+}
+
+.info{
+    color: rgb(241, 206, 7);
+    background: rgb(90, 90, 90);
+    padding: 0.5em 1em;
 }
 </style>

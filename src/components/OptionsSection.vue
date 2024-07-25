@@ -46,11 +46,19 @@ onMounted( async () => {
         </div>
 
         <div class="flex category" v-for="(value,key) in configurations" :key="key">
-            <div class="flex center category_key">
-                <button class="remove_category_btn" @click="removeCategoryHandler(key)" > x </button>
-                <div class="key"> {{ key }}</div>
+            <div v-if="key != 'saved-options'" class="flex center category_key">
+                <div >
+                    <button class="remove_category_btn" @click="removeCategoryHandler(key)" > x </button>
+                    <div class="key"> {{ key }}</div>
+                </div>
+                <textarea  v-model="configurations[key]" class="value">{{value}}</textarea>
             </div>
-            <textarea  v-model="configurations[key]" class="value"></textarea>
+            <div v-else class="flex center">
+                <div>QuickSavedOptions:</div>
+                <div class="saved_option" v-for="item in value.split(',')">
+                    {{ item }}
+                </div>
+            </div>
         </div>
 
         <button class="save_btn" @click="onSaveHandler" > SAVE </button>
@@ -94,5 +102,12 @@ onMounted( async () => {
 
 .add_category_wrapper{
     margin:  0.5em 0.25em;
+}
+
+.saved_option{
+    background: rgb(166, 236, 248);
+    padding: 0.3em;
+    border: 1px solid black;
+    margin: 0.5em;
 }
 </style>

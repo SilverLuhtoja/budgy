@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, defineProps, ref } from 'vue';
 import { getFileName, readFileContents } from '../utils/file_scripts';
 import ProcessSection from '../components/ProcessSection.vue';
-import FileSection from '../components/FileSelection.vue';
+import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -68,8 +68,8 @@ onUnmounted(() => {
     </div>
 
     <section v-if="!processClicked"> 
-      <FileSection :sectionName="`ORIGINAL`" :files="props.originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
-      <FileSection :sectionName="`PROCESSED`" :files="props.processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSelection :sectionName="`ORIGINAL`" :files="props.originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSelection :sectionName="`PROCESSED`" :files="props.processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
     </section>
 
     <div v-if="processClicked">
