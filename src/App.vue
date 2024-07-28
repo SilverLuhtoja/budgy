@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, createDirPath, readDirPath } from './utils/file_scripts';
-import FileSection from "./components/FileSection.vue";
+import SideBarMenu from "./components/SideBarMenu.vue";
 import ViewSection from "./components/ViewSection.vue";
 
 const originalFiles = ref('');
@@ -17,7 +17,7 @@ onMounted(async () => {
   await createDirPath(PROCESSED_FILE_PATH);
   originalFiles.value = await readDirPath(ORGINAL_FILE_PATH);
   processedFiles.value = await readDirPath(PROCESSED_FILE_PATH);
-
+  
   document.addEventListener('keypress', e => {
     if (e.key == 'Escape') {
       window.close();
@@ -29,7 +29,7 @@ onMounted(async () => {
 <template>
   <div class="container">
     <div class="row">
-      <FileSection :originalFiles="originalFiles" 
+      <SideBarMenu :originalFiles="originalFiles" 
       :processedFiles="processedFiles" 
       :showOnViewSection="showOnViewSection"/>
       <ViewSection :content="content"/>
