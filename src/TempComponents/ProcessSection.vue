@@ -1,9 +1,8 @@
+<!--  NOTE: keeping it just in case, probably not needed as there is no need to select specific columns  -->
+
 <script setup>
 import { defineProps, onMounted, ref } from 'vue';
-import {
-  processColumnSelection,
-  processStatment
-} from '../utils/file_process_script';
+import { processStatment } from '../utils/file_process_script';
 import { saveProcessFile } from '../utils/file_scripts';
 
 const props = defineProps([

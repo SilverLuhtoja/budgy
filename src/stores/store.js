@@ -1,5 +1,10 @@
 import { createStore } from 'vuex';
 
+export const Views = {
+  DEFAULT: 'default',
+  OPTIONS: 'options'
+}
+
 export default createStore({
   state: {
     currentView: 'default',
