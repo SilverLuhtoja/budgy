@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onBeforeUnmount, defineProps, ref } from 'vue';
 import { saveConfigurationFile, getConfigurations } from '../utils/file_scripts';
+import GraphSection from './GraphSection.vue';
 
 const props = defineProps(['content'])
 const visibleDetails = ref([]);
@@ -84,8 +85,13 @@ onBeforeUnmount(() => {
                 </div>
             </div>
         </div>
+
+        <!-- GRAPHS -->
+        <div class="section_divider"></div>
+        <GraphSection :data="props.content" />
     </div>
     <pre v-else> {{ props.content }} </pre>
+    
 </template>
 
 <style scoped>
@@ -107,5 +113,12 @@ onBeforeUnmount(() => {
     color: rgb(241, 206, 7);
     background: rgb(90, 90, 90);
     padding: 0.5em 1em;
+}
+
+.section_divider{
+    height: 5px;
+    background: rgb(39, 63, 39);
+    margin: 0 auto;
+    width: 96%;
 }
 </style>
