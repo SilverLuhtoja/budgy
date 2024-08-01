@@ -7,7 +7,7 @@ export const Views = {
 
 export default createStore({
   state: {
-    currentView: 'default',
+    currentView: Views.DEFAULT, 
   },
   mutations: {
     changeCurrentView(state, value) {
