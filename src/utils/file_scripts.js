@@ -11,6 +11,7 @@ import {
 export const ORGINAL_FILE_PATH = `./resources/original_files`;
 export const PROCESSED_FILE_PATH = `./resources/processed_files`;
 export const CONFIGURATIONS_FILE_PATH = `./resources/configurations/configurations.json`;
+export const EXPENDITURE_SETTINGS_PATH = `./resources/configurations/expenditure_settings.json`;
 
 const getFileName = path => {
   let splitted = path.split('/');

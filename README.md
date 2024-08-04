@@ -19,8 +19,9 @@ TODO:
 This is MVP roadmap:
 
 GRAPHS:
-1. Pie-chart calculation, every category is calculated and showed from expected maximum expenditure and show on pie chart how much was actually used.
-Example: Expected spending is 20% from all income, in a month actually 16% was used. This should return 80% on pie-chart.
+1. ~~Pie-chart calculation, every category is calculated and showed from expected maximum expenditure and show on pie chart how much was actually used.
+Example: Expected spending is 20% from all income, in a month actually 16% was used. This should return 80% on pie-chart.~~
+
 2. Line-Chart, same as pie-chart, but it will show expected expenditure in lines and total values, second line shows how much was actually spent.
 3. Bar-chart showing difference of last and this month.
 4. Quarter, half and year charts with average spending data accordingly.

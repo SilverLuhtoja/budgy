@@ -45,7 +45,7 @@ const filterExpenses = async data => {
         }
 
         SumUpCategories[key]['total'] += number;
-        SumUpCategories[key]['total'] = roundUpToDecimals(SumUpCategories[key]['total'], 2)
+        SumUpCategories[key]['total'] = roundUpToDecimalsByTwo(SumUpCategories[key]['total'])
         SumUpCategories[key]['details'].push(data[i]);
         pushed = true
         break;
@@ -67,8 +67,8 @@ const filterExpenses = async data => {
   return SumUpCategories;
 };
 
-const roundUpToDecimals = (num, decimals) => {
-  const factor = Math.pow(10, decimals);
+const roundUpToDecimalsByTwo = (num) => {
+  const factor = Math.pow(10, 2);
   return Math.ceil(num * factor) / factor;
 };
 
@@ -153,4 +153,4 @@ const removeExtraFields = list => {
   return list.slice(1, -3);
 };
 
-export { processColumnSelection, processStatment };
+export { processColumnSelection, processStatment, roundUpToDecimalsByTwo };

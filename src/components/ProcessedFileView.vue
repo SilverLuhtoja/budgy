@@ -3,9 +3,13 @@ import { onMounted, onBeforeUnmount, defineProps, ref } from 'vue';
 import { saveConfigurationFile, getConfigurations } from '../utils/file_scripts';
 import GraphSection from './GraphSection.vue';
 
+//  TODO: put this into Graph View
+import { EXPENDITURE_SETTINGS_PATH, readFileContents } from '../utils/file_scripts';
+
 const props = defineProps(['content'])
 const visibleDetails = ref([]);
 const pressedKeys = ref(new Set());
+const expen_settings = ref('')
 
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
@@ -52,7 +56,8 @@ const quickSaveHighlightedText = async () => {
     saveConfigurationFile(configurations);
 }
 
-onMounted(() => {
+onMounted(async () => {
+  expen_settings.value = JSON.parse(await readFileContents(EXPENDITURE_SETTINGS_PATH))
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
 });
@@ -88,7 +93,7 @@ onBeforeUnmount(() => {
 
         <!-- GRAPHS -->
         <div class="section_divider"></div>
-        <GraphSection :data="props.content" />
+        <GraphSection :data="props.content" :expen_settings="expen_settings" />
     </div>
     <pre v-else> {{ props.content }} </pre>
     

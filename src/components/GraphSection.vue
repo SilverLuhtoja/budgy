@@ -2,30 +2,16 @@
 import { ref, defineProps, onMounted} from 'vue'
 // import { Chart, Responsive, Pie, Tooltip } from 'vue3-charts'
 // import apexchart from 'vueapexcharts';
+import { roundUpToDecimalsByTwo } from '../utils/file_process_script';
 
-const { data } = defineProps(['data'])
 
-const buildGraphData = (data) => {
-    const graph_data = []
-    let total_income = 0
-    for (let key in  data){
-        if (key == "INCOME") {
-            total_income = data[key].total
-            continue
-        }
-        let new_object = {}
-        new_object['name'] = key
-        new_object['percent'] = data[key].total * 100 / total_income
-        new_object['total'] = data[key].total
-        graph_data.push(new_object)
-    }
-    return graph_data
-}
+const { data, expen_settings } = defineProps(['data', 'expen_settings'])
+const expenditures = ref({})
 
-const monthly_pie_chart_data = ref([])
-
-let  series = ref([76, 67, 61, 120])
-let labels = ref(['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'])
+const getPlannedSpendingTotal = (total, planned_expending_weight) =>  (total * 0.01) * planned_expending_weight
+const getActualSpendedPercentageFromPLanned = (planned_total, spended_total) => (spended_total / planned_total) * 100
+ 
+let  series = ref([])
 const chartOptions= ref({
             chart: {
               height: 390,
@@ -73,16 +59,50 @@ const chartOptions= ref({
             }]
           })
 
+const buildOverView = (data, expen_settings) => {
+    let planned_totals = []
+    if (data["INCOME"] != undefined || data["INCOME"] == null) {
+            let total_income = data["INCOME"].total
+            for (let key in  expen_settings){
+                let gat_data = {}
+                gat_data['name'] = key
+                gat_data['planned_percent'] = expen_settings[key]
+                gat_data['planned_total'] = roundUpToDecimalsByTwo(getPlannedSpendingTotal(total_income, expen_settings[key]))
+                gat_data['actual_percent'] = Math.ceil(data[key].total * 100 / total_income)
+                gat_data['actual_total'] = roundUpToDecimalsByTwo(data[key].total)
+                gat_data['difference_percent'] = gat_data['planned_percent'] - gat_data['actual_percent']
+                gat_data['difference_total'] = roundUpToDecimalsByTwo(gat_data['planned_total'] - gat_data['actual_total'])
+
+                planned_totals.push(gat_data)
+             }
+
+             return planned_totals
+    }else{
+      throw new Error("No income to calculate planned expending totals")
+    }
+}
+
 onMounted(() => {
-    monthly_pie_chart_data.value = buildGraphData(data)
-    series.value = monthly_pie_chart_data.value.map(item => Math.ceil(item.percent))
-    chartOptions.value.labels = monthly_pie_chart_data.value.map(item => item.name)
+    expenditures.value = buildOverView(data, expen_settings)
+    series.value = expenditures.value.map(item => Math.ceil(getActualSpendedPercentageFromPLanned(item.planned_total, item.actual_total)))
+    chartOptions.value.labels = expenditures.value.map(item => item.name)
 })
 </script>
 
 <template>
-    <section >
-        <div>
+  <section class="flex" >
+      <div class="overview_wrapper">
+        <h2>OverView</h2>
+        <div v-for="item in expenditures" :key="item.name">
+          <div class="box">
+            <h4>{{ item.name }}</h4>
+            <p> Planned expenditure: {{ item.planned_total }} - {{ item.planned_percent }}%</p>
+            <p> Actual expenditure: {{ item.actual_total }} - {{ item.actual_percent }}%</p>
+            <p :class="item.difference_total > 0 ? 'green' : 'red' "> Difference : {{ item.difference_total }} - {{ item.difference_percent }}%</p>
+          </div>
+        </div>
+      </div>
+        <div class="pie_chart">
             <p>Percent used from total</p>
             <apexchart type="radialBar" height="390" :options="chartOptions" :series="series"></apexchart>
         </div>
@@ -90,9 +110,30 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* section{
-    margin: 1em auto;
-    width: 96%;
-    color: transparent;
-} */
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
+}
+
+.flex{ 
+  display: flex;
+}
+
+.box{
+  border: 2px solid black;
+  margin: 0.25em;
+  padding: 0.25em;
+}
+
+.overview_wrapper{
+  margin: 1em;
+}
+
+.pie_chart{
+  margin-left: 2em;
+  width: 36em;
+}
 </style>
