@@ -1,63 +1,14 @@
 <script setup>
 import { ref, defineProps, onMounted} from 'vue'
-// import { Chart, Responsive, Pie, Tooltip } from 'vue3-charts'
-// import apexchart from 'vueapexcharts';
 import { roundUpToDecimalsByTwo } from '../utils/file_process_script';
+import { getPlannedSpendingTotal} from '../utils/graph_scripts';
+import RadialBarChart from './graphs/RadialBarChart.vue';
+import { EXPENDITURE_SETTINGS_PATH, readFileContents } from '../utils/file_scripts';
+import LineChart from './graphs/LineChart.vue';
 
-
-const { data, expen_settings } = defineProps(['data', 'expen_settings'])
+const { data } = defineProps(['data'])
 const expenditures = ref({})
-
-const getPlannedSpendingTotal = (total, planned_expending_weight) =>  (total * 0.01) * planned_expending_weight
-const getActualSpendedPercentageFromPLanned = (planned_total, spended_total) => (spended_total / planned_total) * 100
- 
-let  series = ref([])
-const chartOptions= ref({
-            chart: {
-              height: 390,
-              type: 'radialBar',
-            },
-            plotOptions: {
-              radialBar: {
-                offsetY: 0,
-                startAngle: 0,
-                endAngle: 270,
-                hollow: {
-                  margin: 5,
-                  size: '20%',
-                  background: 'transparent',
-                  image: undefined,
-                },
-                dataLabels: {
-                  name: {
-                    show: false,
-                  },
-                  value: {
-                    show: false,
-                  }
-                },
-                barLabels: {
-                  enabled: true,
-                  useSeriesColors: true,
-                  offsetX: -8,
-                  fontSize: '16px',
-                  formatter: function(seriesName, opts) {
-                    return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] + "%"
-                  },
-                },
-              }
-            },
-            colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
-            labels: null,
-            responsive: [{
-              breakpoint: 480,
-              options: {
-                legend: {
-                    show: true
-                }
-              }
-            }]
-          })
+const dataReady = ref(false);
 
 const buildOverView = (data, expen_settings) => {
     let planned_totals = []
@@ -77,15 +28,17 @@ const buildOverView = (data, expen_settings) => {
              }
 
              return planned_totals
-    }else{
-      throw new Error("No income to calculate planned expending totals")
     }
+
+    throw new Error("No income to calculate planned expending totals")
 }
 
-onMounted(() => {
-    expenditures.value = buildOverView(data, expen_settings)
-    series.value = expenditures.value.map(item => Math.ceil(getActualSpendedPercentageFromPLanned(item.planned_total, item.actual_total)))
-    chartOptions.value.labels = expenditures.value.map(item => item.name)
+onMounted(async () => {
+    const planned_percentages = JSON.parse(await readFileContents(EXPENDITURE_SETTINGS_PATH))
+    const overviewData = buildOverView(data, planned_percentages);
+    expenditures.value = overviewData;
+    
+    dataReady.value = true;
 })
 </script>
 
@@ -102,10 +55,10 @@ onMounted(() => {
           </div>
         </div>
       </div>
-        <div class="pie_chart">
-            <p>Percent used from total</p>
-            <apexchart type="radialBar" height="390" :options="chartOptions" :series="series"></apexchart>
-        </div>
+      <div v-if="dataReady" class="flex">
+        <RadialBarChart :expenditures="expenditures" />
+        <LineChart :expenditures="expenditures" />
+      </div>
     </section>
 </template>
 
@@ -130,10 +83,6 @@ onMounted(() => {
 
 .overview_wrapper{
   margin: 1em;
-}
-
-.pie_chart{
-  margin-left: 2em;
-  width: 36em;
+  min-width: 20em;
 }
 </style>

@@ -4,6 +4,7 @@ const CONFIGURATIONS_FILE_PATH = './resources/configurations/filter_options.json
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
 const NO_OPTIONS_SELECTED_INFO = 'INFO: No options selected';
+
 const FILTER_PAYMENT_DESCRIPTION = 'Selgitus';
 const FILTER_RECEIVER_PAYER = 'Saaja/Maksja';
 const FILTER_SUM_VALUE = 'Summa';
