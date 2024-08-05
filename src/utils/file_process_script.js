@@ -4,6 +4,7 @@ const CONFIGURATIONS_FILE_PATH = './resources/configurations/filter_options.json
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
 const NO_OPTIONS_SELECTED_INFO = 'INFO: No options selected';
+
 const FILTER_PAYMENT_DESCRIPTION = 'Selgitus';
 const FILTER_RECEIVER_PAYER = 'Saaja/Maksja';
 const FILTER_SUM_VALUE = 'Summa';
@@ -45,7 +46,7 @@ const filterExpenses = async data => {
         }
 
         SumUpCategories[key]['total'] += number;
-        SumUpCategories[key]['total'] = roundUpToDecimals(SumUpCategories[key]['total'], 2)
+        SumUpCategories[key]['total'] = roundUpToDecimalsByTwo(SumUpCategories[key]['total'])
         SumUpCategories[key]['details'].push(data[i]);
         pushed = true
         break;
@@ -67,8 +68,8 @@ const filterExpenses = async data => {
   return SumUpCategories;
 };
 
-const roundUpToDecimals = (num, decimals) => {
-  const factor = Math.pow(10, decimals);
+const roundUpToDecimalsByTwo = (num) => {
+  const factor = Math.pow(10, 2);
   return Math.ceil(num * factor) / factor;
 };
 
@@ -153,4 +154,4 @@ const removeExtraFields = list => {
   return list.slice(1, -3);
 };
 
-export { processColumnSelection, processStatment };
+export { processColumnSelection, processStatment, roundUpToDecimalsByTwo };

@@ -52,7 +52,7 @@ const quickSaveHighlightedText = async () => {
     saveConfigurationFile(configurations);
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
 });
