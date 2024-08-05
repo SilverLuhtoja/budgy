@@ -62,6 +62,17 @@ onMounted( async () => {
         </div>
 
         <button class="save_btn" @click="onSaveHandler" > SAVE </button>
+
+        <div class="section_divider"></div>
+        <section>
+            <h1> AS IT IS SMALLER FUNCTIONALITY TRY IMPLEMENTING RUST</h1>
+
+            <h2>Expenditure settings</h2>
+            <!-- read everything from  filter configurations and create inputs based on that -->
+            <!-- default it by 100/filter_categories between inputs -->
+            <!-- add reactive counting to 100 -->
+            <!-- when save when not 100 full, then error -->
+        </section>
     </section>
 </template>
 
@@ -109,5 +120,13 @@ onMounted( async () => {
     padding: 0.3em;
     border: 1px solid black;
     margin: 0.5em;
+}
+
+.section_divider{
+    height: 5px;
+    background: rgb(39, 63, 39);
+    margin: 0 auto;
+    width: 96%;
+    margin-top: 3em;
 }
 </style>
