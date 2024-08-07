@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted,ref } from 'vue';
-import { saveConfigurationFile, getConfigurations, getExpenditureConfigurations, saveExpenditureConfigurations } from '../utils/file_scripts';
+import { onMounted, ref } from 'vue';
+import { saveConfigurationFile, getConfigurations } from '../utils/file_scripts';
+import ExpenditureConfigs from './options/ExpenditureConfigs.vue';
 
 const configurations = ref(null)
 const category_name = ref("");
@@ -114,18 +115,8 @@ onMounted( async () => {
         <button class="save_btn" @click="onSaveHandler" > SAVE </button>
 
         <div class="section_divider"></div>
-        <section>
-            <h1> AS IT IS SMALLER FUNCTIONALITY TRY IMPLEMENTING RUST</h1>
-            <h1>Expenditure settings</h1>
-            <p> Total: {{ expenditure_total < 100 ? expenditure_total : "Change values, cant be over 100%" }} % </p>
-            <div  v-for="key,value in Object.entries(expenditure_configs)" :key="value">
-                <div class="flex category">
-                    <div class="key"> {{ key[0] }}</div> 
-                    <input class="expenditure_value" v-model="expenditure_configs[key[0]]" @input="onExpenditureChange">% 
-                </div>
-            </div>
-            <button v-if="expenditure_total <= 100" class="save_btn" @click="onExpenditureSaveHandler"> SAVE </button>
-        </section>
+        
+        <ExpenditureConfigs :configurations="configurations" />
     </section>
 </template>
 
@@ -181,10 +172,5 @@ onMounted( async () => {
     margin: 0 auto;
     width: 96%;
     margin-top: 3em;
-}
-
-.expenditure_value{
-    width: 3em;
-    margin-left: 1em;
 }
 </style>
