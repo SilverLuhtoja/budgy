@@ -91,6 +91,31 @@ const saveConfigurationFile = async (configurations) => {
   }
 }
 
+const getExpenditureConfigurations = async () => {
+  let isCreated = await exists(EXPENDITURE_SETTINGS_PATH);
+  if (!isCreated) {
+    await writeFile({
+      path: EXPENDITURE_SETTINGS_PATH,
+      contents: JSON.stringify({}, null, 2),
+    });
+    return;
+  }
+  return await readTextFile(EXPENDITURE_SETTINGS_PATH);
+};
+
+const saveExpenditureConfigurations = async configurations => {
+  if (configurations === '' || configurations === undefined) return;
+
+  try {
+    await writeFile({
+      path: EXPENDITURE_SETTINGS_PATH,
+      contents: JSON.stringify(configurations, null, 2),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const readFileContents = async (path = null) => {
   try {
     if (path != null) {
@@ -137,4 +162,6 @@ export {
   getFileName,
   getConfigurations,
   saveConfigurationFile,
+  getExpenditureConfigurations,
+  saveExpenditureConfigurations,
 };
