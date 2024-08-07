@@ -5,6 +5,8 @@ import ExpenditureConfigs from './options/ExpenditureConfigs.vue';
 
 const configurations = ref(null)
 const category_name = ref("");
+const expenditure_configs = ref("")
+const expenditure_total = ref(0)
 
 const onSaveHandler = () => {
     const savedConfigurations = {};
@@ -18,6 +20,14 @@ const onSaveHandler = () => {
     saveConfigurationFile(savedConfigurations);
 }
 
+const onExpenditureSaveHandler = () => {
+    const savedConfigurations = {};
+    for (const key of Object.entries(expenditure_configs.value)) {
+        savedConfigurations[key[0]] = Number(key[1])
+    }
+    saveExpenditureConfigurations(savedConfigurations);
+}
+
 const removeCategoryHandler = (category) => {
     delete configurations.value[category];
 }
@@ -29,11 +39,49 @@ const addCategoryHandler = () => {
     category_name.value = ""
 }
 
+const getExpenditureOptions = async (data) => {
+    let configs = JSON.parse(await getExpenditureConfigurations())
+    let new_configs = {}
+    
+    if (Object.keys(configs).length !== 0 ) return configs
+    Object.keys(data).forEach(element => {
+        if (element != "saved-options"){
+            new_configs[element] = 0
+        }
+    });
+    await saveExpenditureConfigurations(new_configs)
+    
+    return new_configs
+}  
+
+const calculateExpenditureTotal = () => {
+    return Object.values(expenditure_configs.value).reduce((a,b) => Number(a) + b);
+     
+}
+
+const onExpenditureChange = (event) => {
+    const key = event.target.parentElement.firstChild.innerHTML
+    const value = event.target.value;
+    
+    if (isNaN(value)) {
+        expenditure_configs.value[key] = Number(value.slice(0,-1))
+        return
+    }
+
+    expenditure_total.value = calculateExpenditureTotal()
+    if(Number(value) > 100) {
+        return
+    }
+    expenditure_configs.value[key] = Number(value)
+}
+
 onMounted( async () => {
     configurations.value = JSON.parse(await getConfigurations())
      for (const key in configurations.value ) {
         configurations.value[key] = configurations.value [key].join(', ');
     }
+    expenditure_configs.value = await getExpenditureOptions(configurations.value)
+    expenditure_total.value = calculateExpenditureTotal()
 })
  
 
