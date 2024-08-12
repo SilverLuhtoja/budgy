@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted,ref } from 'vue';
-import { saveConfigurationFile, getConfigurations, getExpenditureConfigurations, saveExpenditureConfigurations } from '../utils/file_scripts';
+import { saveConfigurationFile, CONFIGURATIONS_FILE_PATH, EXPENDITURE_SETTINGS_PATH } from '../utils/file_scripts';
+import { write_file, read_file } from '../utils/rust_file_scripts';
 
 const configurations = ref(null)
 const category_name = ref("");
@@ -24,7 +25,7 @@ const onExpenditureSaveHandler = () => {
     for (const key of Object.entries(expenditure_configs.value)) {
         savedConfigurations[key[0]] = Number(key[1])
     }
-    saveExpenditureConfigurations(savedConfigurations);
+    write_file(EXPENDITURE_SETTINGS_PATH, savedConfigurations) 
 }
 
 const removeCategoryHandler = (category) => {
@@ -39,7 +40,7 @@ const addCategoryHandler = () => {
 }
 
 const getExpenditureOptions = async (data) => {
-    let configs = JSON.parse(await getExpenditureConfigurations())
+    let configs = JSON.parse(await read_file(EXPENDITURE_SETTINGS_PATH))
     let new_configs = {}
     
     if (Object.keys(configs).length !== 0 ) return configs
@@ -48,7 +49,7 @@ const getExpenditureOptions = async (data) => {
             new_configs[element] = 0
         }
     });
-    await saveExpenditureConfigurations(new_configs)
+    await write_file(EXPENDITURE_SETTINGS_PATH, new_configs) 
     
     return new_configs
 }  
@@ -75,7 +76,7 @@ const onExpenditureChange = (event) => {
 }
 
 onMounted( async () => {
-    configurations.value = JSON.parse(await getConfigurations())
+    configurations.value = JSON.parse(await read_file(CONFIGURATIONS_FILE_PATH))
      for (const key in configurations.value ) {
         configurations.value[key] = configurations.value [key].join(', ');
     }
