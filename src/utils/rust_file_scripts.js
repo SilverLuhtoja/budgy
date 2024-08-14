@@ -1,12 +1,28 @@
-import { invoke } from "@tauri-apps/api";
+import { invoke } from '@tauri-apps/api';
+import { exists } from '@tauri-apps/api/fs';
 
 export const write_file = async (path, content) => {
-    return await invoke('write_file', {
-      path: path,
-      content: JSON.stringify(content, null, 2),
-    });
-}
+  if (configurations === '' || configurations === undefined) return;
 
-export const read_file = async (path) => {
+  return await invoke('write_file', {
+    path: path,
+    content: JSON.stringify(content, null, 2),
+  });
+};
+
+export const read_file = async path => {
   return await invoke('read_file', { path });
+};
+
+export const create_dir = async path => {
+  return await invoke('create_dir', { path });
+};
+
+export const create_file = async path => {
+  return await invoke('create_file', { path });
+};
+
+export const create_empty_json_file = async path => {
+  const isCreated = await exists(path);
+  if (!isCreated) return await invoke('write_file', { path: path, content: '{}' });
 };

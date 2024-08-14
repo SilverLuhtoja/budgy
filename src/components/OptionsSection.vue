@@ -11,7 +11,7 @@ const expenditure_total = ref(0)
 const onSaveHandler = () => {
     const savedConfigurations = {};
     for (const key in configurations.value) {
-        if (!configurations.value[key] == "") {
+        if (!configurations.value[key] == "" && configurations.value[key].length !== 0) {
             savedConfigurations[key] = configurations.value[key].split(',').map(item => item.trim());
         }else{
             savedConfigurations[key] = []

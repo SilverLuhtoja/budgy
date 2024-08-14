@@ -5,7 +5,6 @@ import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
 import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
-import Greet from '../TempComponents/Greet.vue';
 
 const store = useStore();
 const props = defineProps(['originalFiles', 'processedFiles', 'showOnViewSection']);
@@ -73,8 +72,6 @@ onUnmounted(() => {
       <FileSelection :sectionName="`ORIGINAL`" :files="props.originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
       <FileSelection :sectionName="`PROCESSED`" :files="props.processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
     </section>
-
-    <Greet />
   </div>
 </template>
 

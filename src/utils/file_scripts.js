@@ -10,10 +10,9 @@ import {
 
 export const ORGINAL_FILE_PATH = `./resources/original_files`;
 export const PROCESSED_FILE_PATH = `./resources/processed_files`;
-
-const CONFIG_BASE_PATH = `./resources/configurations`
-export const CONFIGURATIONS_FILE_PATH = `${CONFIG_BASE_PATH}/configurations.json`;
-export const EXPENDITURE_SETTINGS_PATH = `${CONFIG_BASE_PATH}/expenditure_settings.json`;
+export const CONFIG_FILE_PATH = `./resources/configurations`
+export const CONFIGURATIONS_FILE_PATH = `${CONFIG_FILE_PATH}/configurations.json`;
+export const EXPENDITURE_SETTINGS_PATH = `${CONFIG_FILE_PATH}/expenditure_settings.json`;
 
 const getFileName = path => {
   let splitted = path.split('/');
