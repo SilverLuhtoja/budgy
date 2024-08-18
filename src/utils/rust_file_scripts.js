@@ -2,7 +2,7 @@ import { invoke } from '@tauri-apps/api';
 import { exists } from '@tauri-apps/api/fs';
 
 export const write_file = async (path, content) => {
-  if (configurations === '' || configurations === undefined) return;
+  if (content === '' || content === undefined) return;
 
   return await invoke('write_file', {
     path: path,

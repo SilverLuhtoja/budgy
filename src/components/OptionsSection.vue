@@ -1,23 +1,31 @@
 <script setup>
 import { onMounted,ref } from 'vue';
-import { saveConfigurationFile, CONFIGURATIONS_FILE_PATH, EXPENDITURE_SETTINGS_PATH } from '../utils/file_scripts';
+import { CONFIGURATIONS_FILE_PATH, EXPENDITURE_SETTINGS_PATH } from '../utils/file_scripts';
 import { write_file, read_file } from '../utils/rust_file_scripts';
+import { isObjEmpty } from '../utils/helpers';
 
-const configurations = ref(null)
+const configurations = ref({})
 const category_name = ref("");
-const expenditure_configs = ref("")
+const expenditure_configs = ref([])
 const expenditure_total = ref(0)
 
-const onSaveHandler = () => {
+const onSaveHandler = async () => {
     const savedConfigurations = {};
     for (const key in configurations.value) {
-        if (!configurations.value[key] == "" && configurations.value[key].length !== 0) {
+        const values = configurations.value[key];
+
+        
+        if (typeof values == "object" && !isObjEmpty(values) ) return
+
+        if (!values == "" && !isObjEmpty(values)) {
             savedConfigurations[key] = configurations.value[key].split(',').map(item => item.trim());
+            configurations.value[key] = savedConfigurations[key].join(', ');
         }else{
             savedConfigurations[key] = []
         }
     }
-    saveConfigurationFile(savedConfigurations);
+    await write_file(CONFIGURATIONS_FILE_PATH, savedConfigurations)
+    updateExpenditureOptions()
 }
 
 const onExpenditureSaveHandler = () => {
@@ -39,24 +47,28 @@ const addCategoryHandler = () => {
     category_name.value = ""
 }
 
-const getExpenditureOptions = async (data) => {
-    let configs = JSON.parse(await read_file(EXPENDITURE_SETTINGS_PATH))
+const updateExpenditureOptions = async () => {
+    let configs = JSON.parse(await read_file(CONFIGURATIONS_FILE_PATH))
+    let expenditures = JSON.parse(await read_file(EXPENDITURE_SETTINGS_PATH))
     let new_configs = {}
     
-    if (Object.keys(configs).length !== 0 ) return configs
-    Object.keys(data).forEach(element => {
-        if (element != "saved-options"){
-            new_configs[element] = 0
+    Object.keys(configs).forEach(key => {
+        if (key != "saved-options"){
+            if (expenditures[key] != 0 && expenditures[key] != undefined) {
+                new_configs[key] = expenditures[key]
+            }else{
+                new_configs[key] = 0
+            }
         }
     });
-    await write_file(EXPENDITURE_SETTINGS_PATH, new_configs) 
     
-    return new_configs
+    write_file(EXPENDITURE_SETTINGS_PATH, new_configs) 
+    expenditure_configs.value = new_configs
 }  
 
 const calculateExpenditureTotal = () => {
-    return Object.values(expenditure_configs.value).reduce((a,b) => Number(a) + b);
-     
+    if (isObjEmpty(expenditure_configs.value)) return
+    return Object.values(expenditure_configs.value).reduce((a,b) => Number(a) + Number(b));
 }
 
 const onExpenditureChange = (event) => {
@@ -75,12 +87,17 @@ const onExpenditureChange = (event) => {
     expenditure_configs.value[key] = Number(value)
 }
 
-onMounted( async () => {
-    configurations.value = JSON.parse(await read_file(CONFIGURATIONS_FILE_PATH))
+const formatConfigurationValues = () => {
      for (const key in configurations.value ) {
-        configurations.value[key] = configurations.value [key].join(', ');
+        configurations.value[key] = configurations.value[key].join(', ');
     }
-    expenditure_configs.value = await getExpenditureOptions(configurations.value)
+}
+
+onMounted( async () => {
+    let configs = JSON.parse(await read_file(CONFIGURATIONS_FILE_PATH))
+    configurations.value = configs
+    formatConfigurationValues()
+    await updateExpenditureOptions()
     expenditure_total.value = calculateExpenditureTotal()
 })
  
@@ -131,6 +148,7 @@ onMounted( async () => {
 </template>
 
 <style scoped>
+
 .flex{
     display: flex;
 }
@@ -152,6 +170,8 @@ onMounted( async () => {
 .value {
     margin-left: 2em;
     padding: 0.5em;
+    min-width: 30em;
+    min-height: 6em;
 }
 
 .save_btn{
