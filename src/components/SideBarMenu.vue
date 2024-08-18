@@ -1,19 +1,27 @@
 <script setup>
 import { onMounted, onUnmounted, defineProps, ref, computed} from 'vue';
-import { getFileName, readFileContents, saveProcessFile } from '../utils/file_scripts';
+import { getFileName, ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, readDirPath, readFileContents, saveProcessFile } from '../utils/file_scripts';
 import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
 import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
 
 const store = useStore();
-const props = defineProps(['originalFiles', 'processedFiles', 'showOnViewSection']);
+const props = defineProps(['showOnViewSection']);
+const originalFiles = ref([])
+const processedFiles = ref([])
 const currentlySelectedFile = ref('');
 const fileContent = ref('');
 const processedFilename = ref('')
 const isDefaultView  = computed(() => store.getters.currentView ==  Views.DEFAULT)
 
+const updateFiles = async () => {
+  originalFiles.value  = await readDirPath(ORGINAL_FILE_PATH);
+  processedFiles.value  = await readDirPath(PROCESSED_FILE_PATH);
+}
+
 const readFile = async (path, filename) => {
+  await updateFiles()
   currentlySelectedFile.value = filename;
   let content = await readFileContents(path);
   
@@ -51,7 +59,8 @@ const onClickOutside = e => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await updateFiles()
   window.addEventListener('click', onClickOutside);
 });
 
@@ -69,8 +78,8 @@ onUnmounted(() => {
     </div>
 
     <section > 
-      <FileSelection :sectionName="`ORIGINAL`" :files="props.originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
-      <FileSelection :sectionName="`PROCESSED`" :files="props.processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSelection :sectionName="`ORIGINAL`" :files="originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSelection :sectionName="`PROCESSED`" :files="processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
     </section>
   </div>
 </template>

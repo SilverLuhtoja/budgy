@@ -26,7 +26,7 @@ pub async fn create_dir(path: String) -> Result<String, String> {
 #[tauri::command]
 pub async fn create_file(path: String) -> Result<String, String> {
     match File::create(&path) {
-        Ok(_) => Ok("file created".to_string()),
+        Ok(_) => Ok("File created".to_string()),
         Err(e) => Ok(format!("Failed to create file '{}': {}", &path, e.to_string()))
     }
 }
