@@ -92,11 +92,11 @@ onUnmounted(() => {
   height: 100vh;
   background: rgba(57,66,60);
   color: white;
-  padding: 1em;
+  padding: 0 1em;
 }
 
 .file_panel button {
   padding: 0.25em;
-  margin: 0.25em;
+  margin: 1em 0.25em ;
 }
 </style>
