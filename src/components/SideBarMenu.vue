@@ -52,7 +52,7 @@ const processFile = async () => {
 };
 
 const onClickOutside = e => {
-  if (e.target.tagName == "BUTTON") return
+  if (e.target.tagName == "BUTTON" || currentlySelectedFile.value == undefined ) return
 
   const notProcessedFile = currentlySelectedFile.value.split('.').length != 1
   if (!e.target.classList.contains('file') && notProcessedFile) {
