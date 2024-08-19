@@ -5,6 +5,7 @@ import GraphSection from './GraphSection.vue';
 
 const props = defineProps(['content'])
 const visibleDetails = ref([]);
+const spendingDetails = ref([]);
 const pressedKeys = ref(new Set());
 
 const isPlainObject = (value) => {
@@ -18,6 +19,15 @@ const toggleDetails = (category) => {
     } 
     
     visibleDetails.value.push(category);
+};
+
+const toggleMoreDetails = (key) => {
+    if (spendingDetails.value.includes(key)) {
+        spendingDetails.value = spendingDetails.value.filter(item => item !== key);
+        return
+    } 
+    
+    spendingDetails.value.push(key);
 };
 
 const closeVisibleDetails = () => { visibleDetails.value = []}
@@ -72,14 +82,24 @@ onBeforeUnmount(() => {
         </div>
         <div class="category_card" v-for="[category, value] in Object.entries(props.content)" :key="category">
             <div class="flex">
-                <button @click="toggleDetails(category)">></button>
+                <button @click="toggleDetails(category)">{{visibleDetails.includes(category) ? "\\/" : ">"}}</button>
                 <h2> {{ category }} : {{ value['total'] }} </h2>
             </div>
             <div v-if="visibleDetails.includes(category)">
                 <div class="hide" v-for="[key, val] in Object.entries(value)" :key="key">
                     <div v-if="Array.isArray(val)">
                         <h4> {{ key }}: </h4>
-                        <div v-for="item in val" :key="item"> {{ item }} </div>
+                        <div class="item" v-for="item in val" :key="item[1]"> <div>
+                                <div class="flex" @click="toggleMoreDetails(item[1])">
+                                    <p > {{item[1]}} </p>
+                                    <p> -- {{item[3]}} EUR ({{ item[4] }})</p>
+                                </div>
+                                <div v-if="spendingDetails.includes(item[1])">
+                                    <p>date: {{item[0]}}</p>
+                                    <p>description: {{item[2]}}</p>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
                     <div v-else class="flex"> <h4> {{ key }}: </h4> {{ val }} </div>
                 </div>
@@ -113,6 +133,17 @@ onBeforeUnmount(() => {
     color: rgb(241, 206, 7);
     background: rgb(90, 90, 90);
     padding: 0.5em 1em;
+}
+
+.item{
+    margin: 1em;
+    cursor: pointer;
+    padding: 0.3em;
+    background: rgb(158, 158, 158);
+}
+
+.item:hover{
+    background: rgb(134, 134, 134);
 }
 
 .section_divider{

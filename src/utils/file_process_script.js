@@ -1,6 +1,5 @@
-import { readFileContents } from './file_scripts';
+import { CONFIGURATIONS_FILE_PATH, readFileContents } from './file_scripts';
 
-const CONFIGURATIONS_FILE_PATH = './resources/configurations/filter_options.json';
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
 const NO_OPTIONS_SELECTED_INFO = 'INFO: No options selected';
