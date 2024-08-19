@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, defineProps, ref, computed} from 'vue';
+import { onMounted, onUnmounted, ref, computed} from 'vue';
 import { getFileName, ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, readDirPath, readFileContents, saveProcessFile } from '../utils/file_scripts';
 import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
@@ -7,7 +7,6 @@ import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
 
 const store = useStore();
-const props = defineProps(['showOnViewSection']);
 const originalFiles = ref([])
 const processedFiles = ref([])
 const currentlySelectedFile = ref('');
@@ -21,11 +20,15 @@ const updateFiles = async () => {
 }
 
 const readFile = async (path, filename) => {
-  await updateFiles()
   currentlySelectedFile.value = filename;
   let content = await readFileContents(path);
   
-  if (!path) return
+  // adding new file to list
+  if (!path) {
+    await updateFiles()
+    store.dispatch('setViewContent', content.split("\n"))
+    return 
+  }
 
   if (!path.includes("processed_files")) {
     fileContent.value = content.split("\n");
@@ -34,7 +37,7 @@ const readFile = async (path, filename) => {
   }
 
   processedFilename.value = getFileName(path).split('.')[0]
-  props.showOnViewSection(fileContent.value);
+  store.dispatch('setViewContent', fileContent.value)
   store.dispatch('setCurrentView', Views.DEFAULT)
 };
 
@@ -44,7 +47,7 @@ const isCSVFile = () => {
 
 const processFile = async () => {
   let content = await processStatment(fileContent.value);
-  props.showOnViewSection(content);
+  store.dispatch('setViewContent', content)
   saveProcessFile(processedFilename.value, content)
 };
 
@@ -54,8 +57,7 @@ const onClickOutside = e => {
   const notProcessedFile = currentlySelectedFile.value.split('.').length != 1
   if (!e.target.classList.contains('file') && notProcessedFile) {
     currentlySelectedFile.value = '';
-    // fileContent.value = ''
-    props.showOnViewSection('');
+    store.dispatch('setViewContent', '')
   }
 };
 

@@ -8,6 +8,7 @@ export const Views = {
 export default createStore({
   state: {
     currentView: Views.DEFAULT, 
+    viewContent: ""
   },
   mutations: {
     changeCurrentView(state, value) {
@@ -15,6 +16,11 @@ export default createStore({
     },
     changeCurrentViewToDefault(state) {
         state.currentView = 'default';
+    },
+
+    // View Content
+    changeViewContent(state, value) {
+      state.viewContent = value
     }
   },
   actions: {
@@ -28,8 +34,15 @@ export default createStore({
       commit('changeCurrentView', value);
       console.log(`currentView state changed from ${oldState} to ${this.state.currentView}`);
     },
+
+    setViewContent({commit}, value) {
+      console.log(`viewContent updated`)
+      commit('changeViewContent', value);
+    }
   },
+
   getters: {
     currentView: state => state.currentView,
+    viewContent: state => state.viewContent
   },
 });

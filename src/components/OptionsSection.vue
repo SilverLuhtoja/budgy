@@ -8,12 +8,12 @@ const configurations = ref({})
 const category_name = ref("");
 const expenditure_configs = ref([])
 const expenditure_total = ref(0)
+const not_included_expenditures = ["saved-options", "INCOME"]
 
 const onSaveHandler = async () => {
     const savedConfigurations = {};
     for (const key in configurations.value) {
         const values = configurations.value[key];
-
         
         if (typeof values == "object" && !isObjEmpty(values) ) return
 
@@ -53,7 +53,7 @@ const updateExpenditureOptions = async () => {
     let new_configs = {}
     
     Object.keys(configs).forEach(key => {
-        if (key != "saved-options"){
+        if (!not_included_expenditures.includes(key)){
             if (expenditures[key] != 0 && expenditures[key] != undefined) {
                 new_configs[key] = expenditures[key]
             }else{
@@ -72,7 +72,7 @@ const calculateExpenditureTotal = () => {
 }
 
 const onExpenditureChange = (event) => {
-    const key = event.target.parentElement.firstChild.innerHTML
+    const key = event.target.parentElement.firstChild.innerHTML.replaceAll("amp;","")
     const value = event.target.value;
     
     if (isNaN(value)) {
@@ -135,7 +135,7 @@ onMounted( async () => {
         <section>
             <h1> AS IT IS SMALLER FUNCTIONALITY TRY IMPLEMENTING RUST</h1>
             <h1>Expenditure settings</h1>
-            <p> Total: {{ expenditure_total < 100 ? expenditure_total : "Change values, cant be over 100%" }} % </p>
+            <p> Total: {{ expenditure_total <= 100 ? expenditure_total + "%": "Change values, cant be over 100%" }}  </p>
             <div  v-for="key,value in Object.entries(expenditure_configs)" :key="value">
                 <div class="flex category">
                     <div class="key"> {{ key[0] }}</div> 
