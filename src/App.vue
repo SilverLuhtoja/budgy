@@ -13,6 +13,14 @@ const init_files = async () => {
     create_empty_json_file(EXPENDITURE_SETTINGS_PATH)
 } 
 
+const init_files = async () => {
+    create_dir(ORGINAL_FILE_PATH)
+    create_dir(PROCESSED_FILE_PATH)
+    create_dir(CONFIG_FILE_PATH)
+    create_empty_json_file(CONFIGURATIONS_FILE_PATH)
+    create_empty_json_file(EXPENDITURE_SETTINGS_PATH)
+} 
+
 onMounted(async () => {
   await init_files()
   
