@@ -43,7 +43,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="flex" >
+  <main class="flex" >
       <div class="overview_wrapper">
         <h2>OverView</h2>
         <div v-for="item in expenditures" :key="item.name">
@@ -56,10 +56,10 @@ onMounted(async () => {
         </div>
       </div>
       <div v-if="dataReady" class="flex">
-        <RadialBarChart :expenditures="expenditures" />
-        <LineChart :expenditures="expenditures" />
+        <RadialBarChart class="graph" :expenditures="expenditures" />
+        <LineChart class="graph" :expenditures="expenditures" />
       </div>
-    </section>
+    </main>
 </template>
 
 <style scoped>
@@ -84,5 +84,11 @@ onMounted(async () => {
 .overview_wrapper{
   margin: 1em;
   min-width: 20em;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.342);
+}
+
+.graph{
+  margin: 1em;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.342);
 }
 </style>

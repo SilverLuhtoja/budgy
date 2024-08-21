@@ -59,14 +59,19 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="pie_chart">
-        <h4>Spended from total planned percentage</h4>
+    <main class="pie_chart">
+        <h4 class="graph_title">Spended from total planned percentage</h4>
         <apexchart type="radialBar" height="390" :options="chartOptions" :series="series"></apexchart>
-    </div>
+    </main>
 </template>
 
 <style scoped>
 .pie_chart{
   min-width: 32em;
+}
+
+.graph_title{
+  text-align: center;
+  margin-top: 1em;
 }
 </style>

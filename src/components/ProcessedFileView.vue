@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div v-if="isPlainObject(props.content)">
+    <main v-if="isPlainObject(props.content)">
         <div class="flex">
             <button class="option_btn" @click="closeVisibleDetails">Close All Details</button>
             <button class="option_btn" @click="openDetails">Open All Details</button>
@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
         </div>
         <div class="category_card" v-for="[category, value] in Object.entries(props.content)" :key="category">
             <div class="flex">
-                <button @click="toggleDetails(category)">{{visibleDetails.includes(category) ? "\\/" : ">"}}</button>
+                <button  class="toggle_btn" @click="toggleDetails(category)">{{visibleDetails.includes(category) ? "\\/" : ">"}}</button>
                 <h2> {{ category }} : {{ value['total'] }} </h2>
             </div>
             <div v-if="visibleDetails.includes(category)">
@@ -109,9 +109,8 @@ onBeforeUnmount(() => {
         <!-- GRAPHS -->
         <div class="section_divider"></div>
         <GraphSection :data="props.content" />
-    </div>
+    </main>
     <pre v-else> {{ props.content }} </pre>
-    
 </template>
 
 <style scoped>
@@ -122,11 +121,12 @@ onBeforeUnmount(() => {
 .category_card{
     margin: 1em 0.3em;
     padding: 0.25em;
-    background: rgb(189, 189, 189);
+    background: rgb(216, 216, 216);
 }
 
 .option_btn{
     margin: 0 0.3em;
+    padding: 0.5em 1em;
 }
 
 .info{
@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
     margin: 1em;
     cursor: pointer;
     padding: 0.3em;
-    background: rgb(158, 158, 158);
+    background: rgb(180, 180, 180);
 }
 
 .item:hover{
@@ -150,6 +150,11 @@ onBeforeUnmount(() => {
     height: 5px;
     background: rgb(39, 63, 39);
     margin: 0 auto;
-    width: 96%;
+    width: 100%;
+}
+
+.toggle_btn{
+    padding: 0.3em;
+    margin-right: 0.3em;
 }
 </style>

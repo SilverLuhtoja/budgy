@@ -72,7 +72,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="file_panel">
+  <main class="side_panel">
     <div class="flex">
       <button v-if="isDefaultView" @click="readFile()">+ FILE</button>
       <button v-if="isDefaultView && currentlySelectedFile && isCSVFile()" @click="processFile"> Process </button>
@@ -83,19 +83,20 @@ onUnmounted(() => {
       <FileSelection :sectionName="`ORIGINAL`" :files="originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
       <FileSelection :sectionName="`PROCESSED`" :files="processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
     </section>
-  </div>
+  </main>
 </template>
 
 <style scoped>
-.file_panel {
-  min-width: 300px;
-  height: 100vh;
+.side_panel {
+  min-width: 10vw;
+  height: 100%;
   background: rgba(57,66,60);
   color: white;
   padding: 0 1em;
+  position: fixed;
 }
 
-.file_panel button {
+.side_panel button {
   padding: 0.25em;
   margin: 1em 0.25em ;
 }

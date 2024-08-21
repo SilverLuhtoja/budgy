@@ -25,12 +25,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="row">
-      <SideBarMenu />
-      <ViewSection />
-    </div>
-  </div>
+  <main class="row">
+      <SideBarMenu  />
+      <ViewSection  />
+  </main>
 </template>
 
 <style>

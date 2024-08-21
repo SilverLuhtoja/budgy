@@ -17,7 +17,7 @@ const series = ref([
 
 const chartOptions = ref({
     chart: {
-      height: 350,
+      height: 360,
       type: 'line',
       zoom: {
         enabled: false
@@ -31,7 +31,7 @@ const chartOptions = ref({
     },
     title: {
       text: 'Total vs Actual spending',
-      align: 'left'
+      align: 'middle'
     },
     legend: {
       tooltipHoverFormatter: function(val, opts) {
@@ -70,7 +70,6 @@ const chartOptions = ref({
     }
   })
 
-
 onMounted(() => {
     chartOptions.value.xaxis.categories = expenditures.map(item => item.name)
     actual_values.value =  expenditures.map(item => item.actual_total)
@@ -79,9 +78,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="line_chart">
+    <main class="line_chart">
         <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
-    </div>
+    </main>
 </template>
 
 <style scoped>

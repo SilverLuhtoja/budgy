@@ -11,9 +11,8 @@ const content = computed(() => store.getters.viewContent)
 </script>
 
 <template>
-    <div class="view_panel">
+    <main class="view_panel">
         <section v-if="currentView == Views.DEFAULT">
-            <h1> View Window </h1>
             <div v-if="content && content.length && Array.isArray(content)" v-for="line,idx in content" :key="idx">
                 {{ line }}
             </div>
@@ -24,13 +23,13 @@ const content = computed(() => store.getters.viewContent)
         <section v-if="currentView == Views.OPTIONS">
             <OptionsSection />
         </section>
-    </div>
+    </main>
 </template>
 
 <style scoped>
 .view_panel{
-    width: 100%;
-    height: 100vh;
-    overflow: auto;
+    width: 100vw;
+    margin: 1em;
+    margin-left: 12vw;
 }
 </style>

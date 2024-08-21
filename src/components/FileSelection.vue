@@ -5,7 +5,7 @@ const sectionClicked = ref(false)
 </script>
 
 <template>
-    <section>
+    <main>
         <p class="flex" @click="sectionClicked = !sectionClicked"> {{props.sectionName}} FILES <pre> {{ !sectionClicked ? '>' : "\\/"}} </pre></p>
         <div
             v-if="sectionClicked"
@@ -20,7 +20,7 @@ const sectionClicked = ref(false)
             - {{ file.name }}
         </p>
         </div>
-    </section>
+    </main>
 </template>
 
 <style scoped>

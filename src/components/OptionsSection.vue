@@ -105,8 +105,8 @@ onMounted( async () => {
 </script>
 
 <template>
-    <section>
-        <h1> Filter configurations </h1>
+    <section class="filter_settings">
+        <h3> Filter configurations </h3>
 
         <div class="add_category_wrapper">
             <input v-model="category_name" placeholder="Enter a category name..." />
@@ -115,8 +115,8 @@ onMounted( async () => {
 
         <div class="flex category" v-for="(value,key) in configurations" :key="key">
             <div v-if="key != 'saved-options'" class="flex center category_key">
-                <div >
-                    <button class="remove_category_btn" @click="removeCategoryHandler(key)" > x </button>
+                <div class="category_name flex">
+                    <button class="remove_category_btn" @click="removeCategoryHandler(key)" > - </button>
                     <div class="key"> {{ key }}</div>
                 </div>
                 <textarea  v-model="configurations[key]" class="value">{{value}}</textarea>
@@ -130,20 +130,19 @@ onMounted( async () => {
         </div>
 
         <button class="save_btn" @click="onSaveHandler" > SAVE </button>
+    </section>
 
-        <div class="section_divider"></div>
-        <section>
-            <h1> AS IT IS SMALLER FUNCTIONALITY TRY IMPLEMENTING RUST</h1>
-            <h1>Expenditure settings</h1>
-            <p> Total: {{ expenditure_total <= 100 ? expenditure_total + "%": "Change values, cant be over 100%" }}  </p>
-            <div  v-for="key,value in Object.entries(expenditure_configs)" :key="value">
-                <div class="flex category">
-                    <div class="key"> {{ key[0] }}</div> 
-                    <input class="expenditure_value" v-model="expenditure_configs[key[0]]" @input="onExpenditureChange">% 
-                </div>
+    <div class="section_divider"></div>
+    <section class="expenditure_settings">
+        <h3>Expenditure settings</h3>
+        <p> Total: {{ expenditure_total <= 100 ? expenditure_total + "%": "Change values, cant be over 100%" }}  </p>
+        <div  v-for="key,value in Object.entries(expenditure_configs)" :key="value">
+            <div class="flex category">
+                <div class="key"> {{ key[0] }}</div> 
+                <input class="expenditure_value" v-model="expenditure_configs[key[0]]" @input="onExpenditureChange">% 
             </div>
-            <button v-if="expenditure_total <= 100" class="save_btn" @click="onExpenditureSaveHandler"> SAVE </button>
-        </section>
+        </div>
+        <button class="save_btn" v-if="expenditure_total <= 100" @click="onExpenditureSaveHandler"> SAVE </button>
     </section>
 </template>
 
@@ -153,16 +152,24 @@ onMounted( async () => {
     display: flex;
 }
 
+.expenditure_settings, .filter_settings{
+    margin: 1em;
+}
+
 .center {
     justify-content: center;
     align-items: center;
 }
 
 .category{
-    padding:0.5em 1em;
-    background-color: antiquewhite;
-    border-bottom: 2px solid rgb(250, 215, 169);
+    background-color: rgba(250, 235, 215, 0.829);
+    border: 4px solid rgba(250, 215, 169, 0.801);
 }
+
+.category_name{
+    width: 14em;
+}
+
 .category_key{
     padding: 0.5em;
 }
@@ -170,23 +177,48 @@ onMounted( async () => {
 .value {
     margin-left: 2em;
     padding: 0.5em;
-    min-width: 30em;
-    min-height: 6em;
+    min-width: 50em;
+    min-height: 3em;
 }
 
 .save_btn{
-    background: rgb(139, 212, 139);
+    background: rgb(131, 206, 108);
+    margin: 0.3em 0;
     padding: 0.5em;
+    border: hidden;
+}
+
+.save_btn:hover{
+    background: rgb(128, 240, 128);
+    box-shadow: 1px 1px 2px black;
 }
 
 .remove_category_btn{
-    padding: 0 0.25em;
+    padding: 0 0.5em;
     margin-right:  0.5em;
-    background: rgb(226, 121, 35);
+    background: rgb(241, 128, 34);
+    border: hidden;
+}
+.remove_category_btn:hover{
+    background: rgb(255, 159, 80);
+    box-shadow: 1px 1px 2px black;
 }
 
 .add_category_wrapper{
-    margin:  0.5em 0.25em;
+    margin:  0.5em 0;
+}
+
+.add_category_wrapper input, button {
+    padding: 0.3em;
+}
+
+.add_category_wrapper  button {
+    background: rgb(131, 206, 108);
+}
+
+.add_category_wrapper  button:hover{
+    background: rgb(128, 240, 128);
+    box-shadow: 1px 1px 2px black;
 }
 
 .saved_option{
@@ -200,10 +232,21 @@ onMounted( async () => {
     height: 5px;
     background: rgb(39, 63, 39);
     margin: 0 auto;
-    width: 96%;
+    width: 100%;
     margin-top: 3em;
 }
 
+.expenditure_settings p{
+    margin: 0.5em 0;
+}
+
+.expenditure_settings .key{
+    min-width: 14em;
+}
+
+.expenditure_settings .category {
+    padding: 0.5em;
+}
 .expenditure_value{
     width: 3em;
     margin-left: 1em;
