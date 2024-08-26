@@ -121,8 +121,11 @@ onMounted( async () => {
                 </div>
                 <textarea  v-model="configurations[key]" class="value">{{value}}</textarea>
             </div>
-            <div v-else class="flex center">
-                <div>QuickSavedOptions:</div>
+            <div v-else class="flex center category_key">
+                <div class="category_name flex">
+                    <button class="remove_category_btn" @click="removeCategoryHandler(key)" > - </button>
+                    <div>QuickSavedOptions:</div>
+                </div>
                 <div class="saved_option" v-for="item in value.split(',')">
                     {{ item }}
                 </div>
