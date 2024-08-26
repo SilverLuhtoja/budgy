@@ -25,6 +25,11 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
 2. ~~Line-Chart, same as pie-chart, but it will show expected expenditure in lines and total values, second line shows how much was actually spent.~~
 
 3. Bar-chart showing difference of last and this month.
+    TODO: 
+    1. Save selected file value to store, it needs to be available in proccessed view
+    2. Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name),
+    2. Get both selected file (month) and last month spendings ( if januar then there needs to be detsember)
+
 4. Quarter, half and year charts with average spending data accordingly.
 
 FUNCTIONALITY:
