@@ -5,14 +5,15 @@ import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
 import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
+import { isEmptyValue, isError } from '../utils/helpers.js';
 
 const store = useStore();
 const originalFiles = ref([])
 const processedFiles = ref([])
-const currentlySelectedFile = ref('');
 const fileContent = ref('');
 const processedFilename = ref('')
 const isDefaultView  = computed(() => store.getters.currentView ==  Views.DEFAULT)
+const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
 
 const updateFiles = async () => {
   originalFiles.value  = await readDirPath(ORGINAL_FILE_PATH);
@@ -20,8 +21,14 @@ const updateFiles = async () => {
 }
 
 const readFile = async (path, filename) => {
-  currentlySelectedFile.value = filename;
+  store.dispatch('setCurrentSelectedFile', filename)
   let content = await readFileContents(path);
+  
+  if (content == undefined ) return
+
+  if (isError(content)) {
+    return store.dispatch("setErrorMessage", content)
+  }
   
   // adding new file to list
   if (!path) {
@@ -42,7 +49,7 @@ const readFile = async (path, filename) => {
 };
 
 const isCSVFile = () => {
-  return currentlySelectedFile.value.split('.').pop() === "csv"
+  return currentSelectedFile.value.split('.').pop() === "csv"
 }
 
 const processFile = async () => {
@@ -52,11 +59,11 @@ const processFile = async () => {
 };
 
 const onClickOutside = e => {
-  if (e.target.tagName == "BUTTON" || currentlySelectedFile.value == undefined ) return
+  if (e.target.tagName == "BUTTON" || isEmptyValue(currentSelectedFile.value)) return
 
-  const notProcessedFile = currentlySelectedFile.value.split('.').length != 1
+  const notProcessedFile = currentSelectedFile.value.split('.').length != 1
   if (!e.target.classList.contains('file') && notProcessedFile) {
-    currentlySelectedFile.value = '';
+    store.dispatch('setCurrentSelectedFile', '')
     store.dispatch('setViewContent', '')
   }
 };
@@ -75,13 +82,13 @@ onUnmounted(() => {
   <main class="side_panel">
     <div class="flex">
       <button v-if="isDefaultView" @click="readFile()">+ FILE</button>
-      <button v-if="isDefaultView && currentlySelectedFile && isCSVFile()" @click="processFile"> Process </button>
+      <button v-if="isDefaultView && currentSelectedFile && isCSVFile()" @click="processFile"> Process </button>
       <button  @click="store.dispatch('setCurrentView', 'options')"> {{isDefaultView ? "~" : "X"}} Options</button>
     </div>
 
     <section > 
-      <FileSelection :sectionName="`ORIGINAL`" :files="originalFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
-      <FileSelection :sectionName="`PROCESSED`" :files="processedFiles" :readFile="readFile" :currentlySelectedFile="currentlySelectedFile"   />
+      <FileSelection :sectionName="`ORIGINAL`" :files="originalFiles" :readFile="readFile" />
+      <FileSelection :sectionName="`PROCESSED`" :files="processedFiles" :readFile="readFile" />
     </section>
   </main>
 </template>

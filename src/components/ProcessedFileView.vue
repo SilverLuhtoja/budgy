@@ -1,13 +1,16 @@
 <script setup>
-import { onMounted, onBeforeUnmount, defineProps, ref } from 'vue';
+import { onMounted, onBeforeUnmount, defineProps, ref, computed } from 'vue';
 import { saveConfigurationFile, getConfigurations, CONFIGURATIONS_FILE_PATH } from '../utils/file_scripts';
 import GraphSection from './GraphSection.vue';
 import { write_file } from '../utils/rust_file_scripts';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const props = defineProps(['content'])
 const visibleDetails = ref([]);
 const spendingDetails = ref([]);
 const pressedKeys = ref(new Set());
+const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
 
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
@@ -82,6 +85,9 @@ onBeforeUnmount(() => {
 
 <template>
     <main v-if="isPlainObject(props.content)">
+        <h1 v-if="currentSelectedFile" class="month">
+            {{ currentSelectedFile.toUpperCase() }}
+        </h1>
         <div class="flex">
             <button class="option_btn" @click="closeVisibleDetails">Close All Details</button>
             <button class="option_btn" @click="openDetails">Open All Details</button>
@@ -123,6 +129,11 @@ onBeforeUnmount(() => {
 <style scoped>
 .flex{
     display: flex;
+}
+
+.month{
+    text-decoration: underline;
+    margin: 0.5em;
 }
 
 .category_card{

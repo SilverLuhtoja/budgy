@@ -1,7 +1,12 @@
 <script setup>
-import { defineProps, ref } from 'vue';
-const props = defineProps(['sectionName', 'files', 'readFile', 'currentlySelectedFile']);
+import { defineProps, ref, computed } from 'vue';
+import { useStore } from 'vuex';
+const props = defineProps(['sectionName', 'files', 'readFile']);
 const sectionClicked = ref(false)
+
+const store = useStore();
+const currentlySelectedFile  = computed(() => store.getters.currentSelectedFile)
+
 </script>
 
 <template>
@@ -13,7 +18,7 @@ const sectionClicked = ref(false)
             :key="file.name"
             >
             <p
-            :class="{ selected: props.currentlySelectedFile === file.name }"
+            :class="{ selected: currentlySelectedFile === file.name }"
             class="file"
             @click="readFile(file.path, file.name)"
             >

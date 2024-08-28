@@ -8,6 +8,9 @@ import {
   writeFile,
 } from '@tauri-apps/api/fs';
 
+const EST_MONTHS = ['jaanuar', 'veebruar', 'märts', 'aprill', 'mai', 'juuni', 'juuli', 'august', 'september', 'oktoober', 'november', 'detsember']
+const YEAR_SUFFIX = ['2023','2024', '2025']
+
 export const ORGINAL_FILE_PATH = `./resources/original_files`;
 export const PROCESSED_FILE_PATH = `./resources/processed_files`;
 export const CONFIG_FILE_PATH = `./resources/configurations`
@@ -130,6 +133,21 @@ const readFileContents = async (path = null) => {
     });
 
     if (!selectedPath) return;
+
+    const parts = getFileName(selectedPath).split('_');
+    
+    if (parts.length != 2) {
+      return new Error('Filename should have format > month_year.csv');
+    }
+    
+    if (!EST_MONTHS.includes(parts[0].toLowerCase())) {
+      return new Error(`Filename not correct, should contain values > ${EST_MONTHS}`);
+    }
+    
+    const suffix_part = parts[1].split(".")[0]
+    if (!YEAR_SUFFIX.includes(suffix_part)) {
+      return new Error(`File year not correct, should contain values > ${YEAR_SUFFIX}`);
+    }
 
     await createOriginalFile(selectedPath);
     return await readTextFile(getFileNameInOriginalDir(selectedPath));

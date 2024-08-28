@@ -26,16 +26,19 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
 
 3. Bar-chart showing difference of last and this month.
     TODO: 
-    1. Save selected file value to store, it needs to be available in proccessed view
+    1.  ~~ Save selected file value to store, it needs to be available in proccessed view ~~
     2. Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name),
     2. Get both selected file (month) and last month spendings ( if januar then there needs to be detsember)
 
 4. Quarter, half and year charts with average spending data accordingly.
 
 FUNCTIONALITY:
-1. add expected values and percents for categories ( Example: transport : 20% - 200eur)
+1. ~~ add expected values and percents for categories ( Example: transport : 20% - 200eur) ~~
 2. Think how to make it more intuitive to use
-3. Try to cooperate more Rust into project
+3. ~~ Try to cooperate more Rust into project ~~ 
+4. make an error flash messaging
+
+
 
 VISUALS:
 Update all view for make it more modern and professional

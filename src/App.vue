@@ -1,9 +1,13 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, CONFIG_FILE_PATH, CONFIGURATIONS_FILE_PATH, EXPENDITURE_SETTINGS_PATH } from './utils/file_scripts';
 import SideBarMenu from "./components/SideBarMenu.vue";
 import ViewSection from "./components/ViewSection.vue";
 import { create_dir, create_empty_json_file } from './utils/rust_file_scripts';
+import { useStore } from 'vuex';
+
+const store = useStore()
+const errorMessage = computed(() => store.getters.errorMessage)
 
 const init_files = async () => {
     create_dir(ORGINAL_FILE_PATH)
@@ -26,6 +30,9 @@ onMounted(async () => {
 
 <template>
   <main class="row">
+      <div v-if="errorMessage" class="flash_message">
+        <h3> {{ errorMessage }} </h3>
+      </div>
       <SideBarMenu  />
       <ViewSection  />
   </main>
@@ -39,5 +46,17 @@ onMounted(async () => {
 
 .row {
   display: flex;
+}
+
+.flash_message{
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 60em;
+  height: 10em;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
