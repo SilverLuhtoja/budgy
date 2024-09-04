@@ -26,9 +26,10 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
 
 3. Bar-chart showing difference of last and this month.
     TODO: 
-    1.  ~~ Save selected file value to store, it needs to be available in proccessed view ~~
-    2. Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name),
-    2. Get both selected file (month) and last month spendings ( if januar then there needs to be detsember)
+    1. ~~ Save selected file value to store, it needs to be available in proccessed view ~~
+    2. ~~ Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name), ~~ 
+    3. Get both selected file (month) and last month spendings ( if jaanuar then there needs to be detsember)
+    4. In graph show current month and last month name. 
 
 4. Quarter, half and year charts with average spending data accordingly.
 

@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed} from 'vue';
-import { getFileName, ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, readDirPath, readFileContents, saveProcessFile } from '../utils/file_scripts';
+import { getFileName, ORGINAL_FILE_PATH, PROCESSED_FILE_PATH, readDirPath, readFileContents, saveProcessFile, sortFilesByMonthsAndYear } from '../utils/file_scripts';
 import FileSelection from '../components/FileSelection.vue';
 import { useStore } from 'vuex';
 import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
-import { isEmptyValue, isError } from '../utils/helpers.js';
+import { isEmptyValue, isError, isObjEmpty } from '../utils/helpers.js';
 
 const store = useStore();
 const originalFiles = ref([])
@@ -16,8 +16,8 @@ const isDefaultView  = computed(() => store.getters.currentView ==  Views.DEFAUL
 const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
 
 const updateFiles = async () => {
-  originalFiles.value  = await readDirPath(ORGINAL_FILE_PATH);
-  processedFiles.value  = await readDirPath(PROCESSED_FILE_PATH);
+  originalFiles.value  = sortFilesByMonthsAndYear(await readDirPath(ORGINAL_FILE_PATH));
+  processedFiles.value  = sortFilesByMonthsAndYear(await readDirPath(PROCESSED_FILE_PATH))
 }
 
 const readFile = async (path, filename) => {
@@ -53,9 +53,14 @@ const isCSVFile = () => {
 }
 
 const processFile = async () => {
-  let content = await processStatment(fileContent.value);
-  store.dispatch('setViewContent', content)
-  saveProcessFile(processedFilename.value, content)
+    let content = await processStatment(fileContent.value);
+    if (isObjEmpty(content)) {
+       store.dispatch('setErrorMessage', "Error with processing")
+       return
+    }
+    
+    store.dispatch('setViewContent', content)
+    saveProcessFile(processedFilename.value, content)
 };
 
 const onClickOutside = e => {

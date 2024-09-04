@@ -8,7 +8,7 @@ import {
   writeFile,
 } from '@tauri-apps/api/fs';
 
-const EST_MONTHS = ['jaanuar', 'veebruar', 'märts', 'aprill', 'mai', 'juuni', 'juuli', 'august', 'september', 'oktoober', 'november', 'detsember']
+export const EST_MONTHS = ['jaanuar', 'veebruar', 'märts', 'aprill', 'mai', 'juuni', 'juuli', 'august', 'september', 'oktoober', 'november', 'detsember']
 const YEAR_SUFFIX = ['2023','2024', '2025']
 
 export const ORGINAL_FILE_PATH = `./resources/original_files`;
@@ -73,9 +73,12 @@ const saveProcessFile = async (source_path, fileContent) => {
 const getConfigurations = async () => {
   let isCreated = await exists(CONFIGURATIONS_FILE_PATH);
   if (!isCreated) {
+    let default_configs = {
+      "INCOME" : []
+    }
     await writeFile({
       path: CONFIGURATIONS_FILE_PATH,
-      contents: JSON.stringify({}, null, 2),
+      contents: JSON.stringify(default_configs, null, 2),
     });
     return;
   }
@@ -173,6 +176,42 @@ const readDirPath = async dir_path => {
   return files;
 };
 
+const sortFilesByMonthsAndYear = files => {
+  // Filter out the files with month names
+  let monthFiles = files.filter(file =>
+    EST_MONTHS.some(month => file.name.includes(month))
+  );
+
+  // Sort monthFiles by year and month
+  monthFiles.sort((a, b) => {
+    let [monthA, yearA] = extractMonthYear(a.name);
+    let [monthB, yearB] = extractMonthYear(b.name);
+
+    if (yearA === yearB) {
+      return EST_MONTHS.indexOf(monthA) - EST_MONTHS.indexOf(monthB);
+    } 
+    return yearA - yearB;
+  });
+
+  // Get the non-month files
+  let notSorted = files.filter(
+    file => !EST_MONTHS.some(month => file.name.includes(month))
+  );
+
+  return monthFiles.concat(notSorted);
+};
+
+const extractMonthYear = filename => {
+  for (const month of EST_MONTHS) {
+    if (filename.includes(month)) {
+      let yearMatch = filename.match(/\d{4}/);
+      let year = yearMatch ? parseInt(yearMatch[0]) : null;
+      return [month, year];
+    }
+  }
+  return [null, null];
+};
+
 export {
   readFileContents,
   createDirPath,
@@ -183,4 +222,6 @@ export {
   saveConfigurationFile,
   getExpenditureConfigurations,
   saveExpenditureConfigurations,
+  sortFilesByMonthsAndYear,
+  extractMonthYear,
 };
