@@ -19,7 +19,7 @@ const processStatment = async fileContent => {
 };
 
 const filterExpenses = async data => {
-  const optionsData =JSON.parse( await readFileContents(CONFIGURATIONS_FILE_PATH));
+  const optionsData = JSON.parse( await readFileContents(CONFIGURATIONS_FILE_PATH));
   let entries = Object.entries(optionsData);
   let not_filtered_list = []
   let SumUpCategories = {};
@@ -31,6 +31,7 @@ const filterExpenses = async data => {
   for (let i = 1; i < data.length; i++) {
     let pushed = false
     for (const [key, values] of entries) {
+      if (key == 'saved-options') continue
       if (isMatch(values, data[i], [explanationIdx, receiverPayerIdx]) && values.length > 0) {
         let number = Number(data[i][sumIdx]);
         if (data[i][debetIdx] == 'K' && key != 'INCOME') {

@@ -14,8 +14,6 @@ For Graphs using currently (deside on one):
 2. or npm install apexcharts and npm install vue-apexcharts and nom install vue3-apexcharts (https://apexcharts.com/vue-chart-demos/)
 
 
-TODO: 
-
 This is MVP roadmap:
 
 GRAPHS:
@@ -24,26 +22,36 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
 
 2. ~~Line-Chart, same as pie-chart, but it will show expected expenditure in lines and total values, second line shows how much was actually spent.~~
 
-3. Bar-chart showing difference of last and this month.
+3. ~~Bar-chart showing difference of last and this month.~~
+
     TODO: 
-    1. ~~ Save selected file value to store, it needs to be available in proccessed view ~~
-    2. ~~ Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name), ~~ 
-    3. Get both selected file (month) and last month spendings ( if jaanuar then there needs to be detsember)
-    4. In graph show current month and last month name. 
+    1. ~~Save selected file value to store, it needs to be available in proccessed view~~
+    2. ~~Make algorythm to cycle months, they also should be in order (possibly put requirement to have year in csv file name)~~ 
+    3. ~~Get both selected file (month) and last month spendings ( if jaanuar then there needs to be detsember)~~ 
+    4. ~~In graph show current month and last month name~~ 
 
 4. Quarter, half and year charts with average spending data accordingly.
+    1. make button - for year overview button
+    2. make page - 
+        1. this should include buttons - quarter, half and full year
+        2. quarted button - I , II , III , IV , shows also last quarter (according months)
+        3. half - I , II , shows also current half year
+        4. year - what year
+    3. Maybe make is possible to select example this januar and last januar or what ever other month/months (like multiple for compare)
 
 FUNCTIONALITY:
 1. ~~ add expected values and percents for categories ( Example: transport : 20% - 200eur) ~~
 2. Think how to make it more intuitive to use
 3. ~~ Try to cooperate more Rust into project ~~ 
-4. make an error flash messaging
+4. ~~make an error flash messaging~~
+    1. make it more pretty
+5. Maybe make it possible to manipulate saved files: edit, delete 
 
 
 
 VISUALS:
 Update all view for make it more modern and professional
-1. options view 
-2. processed file view
+1. options view - improvments needed
+2. processed file view  - improvments needed
 3. regular view
 4. possibility to hide sidepanel

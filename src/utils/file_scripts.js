@@ -38,10 +38,39 @@ const createOriginalFile = async source_path => {
   }
 
   try {
-    await copyFile(source_path, destination_path);
+    let content = await readFileContents(source_path);
+    let lines = content.split('\n');
+    let new_content = []
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i] == '') {
+        continue;
+      }
+
+      new_content.push(normalizeLine(new_line));
+    }
+
+    await writeFile({
+      path: destination_path,
+      contents: new_content.join("\n"),
+    });
   } catch (err) {
     console.error(err);
   }
+};
+
+const normalizeLine = (line) => {
+  return replaceCommasInsideQuotes(line)
+    .replaceAll(',', '.')
+    .replaceAll('"', '')
+    .replaceAll(';', ',');
+}
+
+const replaceCommasInsideQuotes = line => {
+  // Match the section within quotes
+  return line.replace(/"(.*?)"/g, function (match) {
+      // Replace commas within the matched section
+      return match.replace(/;/g, '-');
+    });
 };
 
 const saveProcessFile = async (source_path, fileContent) => {

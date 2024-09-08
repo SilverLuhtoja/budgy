@@ -17,7 +17,7 @@ const content = computed(() => store.getters.viewContent)
                 {{ line }}
             </div>
             <div v-else >
-                <ProcessedFileView :content="content" />
+                <ProcessedFileView />
             </div>
         </section>
         <section v-if="currentView == Views.OPTIONS">
@@ -30,6 +30,6 @@ const content = computed(() => store.getters.viewContent)
 .view_panel{
     width: 100vw;
     margin: 1em;
-    margin-left: 12vw;
+    margin-left: 14vw;
 }
 </style>

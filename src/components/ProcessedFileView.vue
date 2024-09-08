@@ -1,16 +1,16 @@
 <script setup>
-import { onMounted, onBeforeUnmount, defineProps, ref, computed } from 'vue';
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
 import { saveConfigurationFile, getConfigurations, CONFIGURATIONS_FILE_PATH } from '../utils/file_scripts';
 import GraphSection from './GraphSection.vue';
 import { write_file } from '../utils/rust_file_scripts';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const props = defineProps(['content'])
 const visibleDetails = ref([]);
 const spendingDetails = ref([]);
 const pressedKeys = ref(new Set());
 const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
+const content = computed(() => store.getters.viewContent)
 
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
@@ -37,7 +37,7 @@ const toggleMoreDetails = (key) => {
 const closeVisibleDetails = () => { visibleDetails.value = []}
 
 const openDetails = () => { 
-    for (let category of Object.keys(props.content)){
+    for (let category of Object.keys(content)){
        visibleDetails.value.push(category);
     }
 }
@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main v-if="isPlainObject(props.content)">
+    <main v-if="isPlainObject(content)">
         <h1 v-if="currentSelectedFile" class="month">
             {{ currentSelectedFile.toUpperCase() }}
         </h1>
@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
             <button class="option_btn" @click="openDetails">Open All Details</button>
             <p class="info">Shift+A to quick save highlighted text to options</p>
         </div>
-        <div class="category_card" v-for="[category, value] in Object.entries(props.content)" :key="category">
+        <div class="category_card" v-for="[category, value] in Object.entries(content)" :key="category">
             <div class="flex">
                 <button  class="toggle_btn" @click="toggleDetails(category)">{{visibleDetails.includes(category) ? "\\/" : ">"}}</button>
                 <h2> {{ category }} : {{ value['total'] }} </h2>
@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
                 <div class="hide" v-for="[key, val] in Object.entries(value)" :key="key">
                     <div v-if="Array.isArray(val)">
                         <h4> {{ key }}: </h4>
-                        <div class="item" v-for="item in val" :key="item[1]"> <div>
+                        <div class="item" v-for="item in val" :key="item[1]+'_'+item[2]"> <div>
                                 <div class="flex" @click="toggleMoreDetails(item[1])">
                                     <p > {{item[1]}} </p>
                                     <p> -- {{item[3]}} EUR ({{ item[4] }})</p>
@@ -121,9 +121,9 @@ onBeforeUnmount(() => {
 
         <!-- GRAPHS -->
         <div class="section_divider"></div>
-        <GraphSection :data="props.content" />
+        <GraphSection />
     </main>
-    <pre v-else> {{ props.content }} </pre>
+    <pre v-else> {{ content }} </pre>
 </template>
 
 <style scoped>

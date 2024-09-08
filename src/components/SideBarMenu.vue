@@ -100,7 +100,7 @@ onUnmounted(() => {
 
 <style scoped>
 .side_panel {
-  min-width: 10vw;
+  width: 12vw;
   height: 100%;
   background: rgba(57,66,60);
   color: white;
