@@ -86,7 +86,7 @@ watch(data,
               <h4>{{ item.name }}</h4>
               <p> Planned expenditure: {{ item.planned_total }} - {{ item.planned_percent }}%</p>
               <p> Actual expenditure: {{ item.actual_total }} - {{ item.actual_percent }}%</p>
-              <p :class="item.difference_total > 0 ? 'green' : 'red' "> Difference : {{ item.difference_total }} - {{ item.difference_percent }}%</p>
+              <p :class="item.difference_total > 0 ? 'green' : 'red' "> Difference : {{ item.difference_total }} EUR > [{{ item.difference_percent }}%]</p>
             </div>
           </div>
         </div>

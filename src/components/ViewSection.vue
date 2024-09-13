@@ -2,7 +2,8 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { Views } from '../stores/store.js'
-import OptionsSection from './OptionsSection.vue'
+import OptionsView from './OptionsView.vue'
+import OverView from './OverView.vue'
 import ProcessedFileView from './ProcessedFileView.vue';
 
 const store = useStore();
@@ -21,7 +22,10 @@ const content = computed(() => store.getters.viewContent)
             </div>
         </section>
         <section v-if="currentView == Views.OPTIONS">
-            <OptionsSection />
+            <OptionsView />
+        </section>
+        <section v-if="currentView == Views.OVERVIEW">
+            <OverView />
         </section>
     </main>
 </template>

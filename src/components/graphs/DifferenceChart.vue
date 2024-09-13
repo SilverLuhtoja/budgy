@@ -6,12 +6,12 @@ const current_month_expendings = ref([])
 const last_month_expendings = ref([])
 const series = ref([
         {
-            name: months[0],
-            data: current_month_expendings
-        },
-        {
             name: months[1],
             data: last_month_expendings
+        },
+        {
+            name: months[0],
+            data: current_month_expendings
         }
     ])
 
@@ -24,7 +24,7 @@ const chartOptions = ref({
       },
     },
     stroke: {
-      width: [1, 2],
+      width: [1, 1],
       curve: 'straight',
       dashArray: [0, 8],
       colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
@@ -72,15 +72,8 @@ const chartOptions = ref({
 
 onMounted(() => {
     chartOptions.value.xaxis.categories = current_month_expenditures.map(item => item.name)
-    // console.log(`CURRENT: ${current_month_expenditures}`);
-    // console.log(current_month_expenditures);
-    // console.log(`LAST:${last_month_expenditures}`);
-    // console.log(last_month_expenditures);
-    
     current_month_expendings.value = current_month_expenditures.map(item => item.actual_total)
     last_month_expendings.value = last_month_expenditures.map(item => item.actual_total)
-    // actual_values.value =  current_month_expenditures.map(item => item.actual_total)
-    // planned_values.value =  current_month_expenditures.map(item => item.planned_total)
 })
 </script>
 

@@ -88,7 +88,8 @@ onUnmounted(() => {
     <div class="flex">
       <button v-if="isDefaultView" @click="readFile()">+ FILE</button>
       <button v-if="isDefaultView && currentSelectedFile && isCSVFile()" @click="processFile"> Process </button>
-      <button  @click="store.dispatch('setCurrentView', 'options')"> {{isDefaultView ? "~" : "X"}} Options</button>
+      <button  @click="store.dispatch('setCurrentView', 'options')"> {{store.getters.currentView != Views.OPTIONS ? "~" : "X"}} Options</button>
+      <button  @click="store.dispatch('setCurrentView', 'overview')"> {{ store.getters.currentView != Views.OVERVIEW ? "~" : "X"}} Overview</button>
     </div>
 
     <section > 
