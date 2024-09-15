@@ -33,10 +33,10 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
 4. Quarter, half and year charts with average spending data accordingly.
     1. ~~make button - for year overview button~~
     2. make page -
-        1. by default shows ongoing current year 
-        2. this should include buttons - quarter, half and full year
-        3. quarted button - I , II , III , IV , shows also last quarter (according months)
-        4. half - I , II , shows also current half year
+        1. ~~by default shows ongoing current year~~
+        2. ???? >  this should include buttons - quarter, half and full year
+        3. ???? > quarted button - I , II , III , IV , shows also last quarter (according months)
+        4. ???? >  half - I , II , shows also current half year
         5. year - what year
     3. Maybe make is possible to select example this januar and last januar or what ever other month/months (like multiple for compare)
 
@@ -45,10 +45,8 @@ FUNCTIONALITY:
 2. Think how to make it more intuitive to use
 3. ~~ Try to cooperate more Rust into project ~~ 
 4. ~~make an error flash messaging~~
-    1. make it more pretty
 5. Maybe make it possible to manipulate saved files: edit, delete 
-
-
+6. when processing file and something is not put in category (something is still unfiltered), then make it stand out in file view, example put (!) next to filename
 
 VISUALS:
 Update all view for make it more modern and professional

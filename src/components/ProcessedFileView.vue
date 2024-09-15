@@ -72,6 +72,17 @@ const quickSaveHighlightedText = async () => {
     saveConfigurationFile(configurations);
 }
 
+const calculateCategoryTotal = () => {
+    let total = 0
+   for (let category of Object.keys(content.value)){
+        if(category != "INCOME"){
+            total += content.value[category].total
+        }
+   }
+       
+    return total
+}
+
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
@@ -93,6 +104,8 @@ onBeforeUnmount(() => {
             <button class="option_btn" @click="openDetails">Open All Details</button>
             <p class="info">Shift+A to quick save highlighted text to options</p>
         </div>
+        <br>
+        <h2> Total spent: {{ calculateCategoryTotal() }}</h2>
         <div class="category_card" v-for="[category, value] in Object.entries(content)" :key="category">
             <div class="flex">
                 <button  class="toggle_btn" @click="toggleDetails(category)">{{visibleDetails.includes(category) ? "\\/" : ">"}}</button>

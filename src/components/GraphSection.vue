@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, computed} from 'vue'
-import { roundUpToDecimalsByTwo } from '../utils/file_process_script';
-import { getLastMonthFilename, getPlannedSpendingTotal} from '../utils/graph_scripts';
+import { buildOverView, getLastMonthFilename} from '../utils/graph_scripts';
 import RadialBarChart from './graphs/RadialBarChart.vue';
 import { EXPENDITURE_SETTINGS_PATH, extractMonthYear, PROCESSED_FILE_PATH, readFileContents } from '../utils/file_scripts';
 import LineChart from './graphs/LineChart.vue';
@@ -19,32 +18,6 @@ const expenditures = ref({})
 const last_month_expenditures = ref({})
 const dataReady = ref(false);
 
-const buildOverView = (data, expen_settings) => {
-    let planned_totals = []
-    if (data["INCOME"] != undefined || data["INCOME"] == null) {
-            let total_income = data["INCOME"].total
-            for (let key in  expen_settings){
-              // dont count in expenditure which key value is 0
-              if (data[key] == undefined || expen_settings[key] == 0) continue
-              let gat_data = {}
-              
-              gat_data['name'] = key
-              gat_data['planned_percent'] = expen_settings[key]
-              gat_data['planned_total'] = roundUpToDecimalsByTwo(getPlannedSpendingTotal(total_income, expen_settings[key]))
-              gat_data['actual_percent'] = Math.ceil(data[key].total * 100 / total_income)
-              gat_data['actual_total'] = roundUpToDecimalsByTwo(data[key].total)
-              gat_data['difference_percent'] = gat_data['planned_percent'] - gat_data['actual_percent']
-              gat_data['difference_total'] = roundUpToDecimalsByTwo(gat_data['planned_total'] - gat_data['actual_total'])
-
-              planned_totals.push(gat_data)
-            }
-
-             return planned_totals
-    }
-
-    throw new Error("No income to calculate planned expending totals")
-}
-
 const getLastMonthData = async () => {
   let lastMonthFilename = getLastMonthFilename(currentSelectedFile.value)
   months.value = [extractMonthYear(currentSelectedFile.value)[0], extractMonthYear(lastMonthFilename)[0] ]
@@ -53,7 +26,6 @@ const getLastMonthData = async () => {
      return JSON.parse(await readFileContents(path));
   }
 }
-
 
 watch(data,
   async (newData) => {

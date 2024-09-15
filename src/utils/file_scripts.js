@@ -46,7 +46,7 @@ const createOriginalFile = async source_path => {
         continue;
       }
 
-      new_content.push(normalizeLine(new_line));
+      new_content.push(normalizeLine(lines[i]));
     }
 
     await writeFile({
@@ -155,7 +155,7 @@ const saveExpenditureConfigurations = async configurations => {
 const readFileContents = async (path = null) => {
   try {
     if (path != null) {
-        return await readTextFile(path);
+        return await readTextFile(path.toLowerCase());
     }
 
     const selectedPath = await open({
