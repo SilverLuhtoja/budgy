@@ -54,15 +54,14 @@ const chartOptions = ref({
 
 const createExpenditureTooltip = (data) => {
   let tooltip_data = ''
-  let style = `"
+  let style = data.length ?  `"
     padding: 2em; 
     font-size:1.2em;
-  "`
+  "` :  ""
   
   Object.values(data).forEach(value => {
     tooltip_data += `<li><b>${value.name}</b>:${+value.actual_total}</li>`
   })
-  
   return `<div style=${style}><uL>${tooltip_data}</uL></div>`
 }
 

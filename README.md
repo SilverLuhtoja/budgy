@@ -37,8 +37,9 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
         2. ???? >  this should include buttons - quarter, half and full year
         3. ???? > quarted button - I , II , III , IV , shows also last quarter (according months)
         4. ???? >  half - I , II , shows also current half year
-        5. year - what year
-    3. Maybe make is possible to select example this januar and last januar or what ever other month/months (like multiple for compare)
+        5. ~~year - what year~~
+    3. ~~Maybe make is possible to select example this januar and last januar or what ever other month/months (like multiple for compare)~~
+        1. when selecting month in one it should not include in other selection
 
 FUNCTIONALITY:
 1. ~~ add expected values and percents for categories ( Example: transport : 20% - 200eur) ~~
