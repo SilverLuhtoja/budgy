@@ -7,6 +7,7 @@ import {
   readDir,
   writeFile,
 } from '@tauri-apps/api/fs';
+import { remove_file } from './rust_file_scripts';
 
 export const EST_MONTHS = ['jaanuar', 'veebruar', 'märts', 'aprill', 'mai', 'juuni', 'juuli', 'august', 'september', 'oktoober', 'november', 'detsember']
 const YEAR_SUFFIX = ['2023','2024', '2025']
@@ -77,26 +78,31 @@ const saveProcessFile = async (source_path, fileContent) => {
   if (!source_path) return
   const destination_path = PROCESSED_FILE_PATH + '/' + source_path;
   const isOriginalFile = await exists(destination_path);
+  const saving_path = anyNotFilteredContent(fileContent) ? destination_path + '(!)' : destination_path;
 
   if (isOriginalFile) {
     const answer = await ask(
-      `File ${getFileName(
-        source_path
-      )} is already present in destination. Would you like to overwrite it ?`,
+      `File ${getFileName(source_path)} is already present in destination. Would you like to overwrite it ?`,
       { type: 'info', okLabel: 'Yes', cancelLabel: 'No' }
     );
     if (!answer) return;
+
+    const removable_file = saving_path.includes('(!)') ? destination_path : destination_path + '(!)';
+    await remove_file(removable_file);
   }
-
-
+    
   try {
     await writeFile({
-      path: destination_path,
+      path: saving_path,
       contents: JSON.stringify(fileContent, null, 2),
     });
   } catch (err) {
     console.error(err);
   }
+};
+
+const anyNotFilteredContent = fileContent => {
+  return Object.keys(fileContent).includes('not_filtered');
 };
 
 const getConfigurations = async () => {

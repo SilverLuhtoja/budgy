@@ -39,7 +39,7 @@ Example: Expected spending is 20% from all income, in a month actually 16% was u
         4. ???? >  half - I , II , shows also current half year
         5. ~~year - what year~~
     3. ~~Maybe make is possible to select example this januar and last januar or what ever other month/months (like multiple for compare)~~
-        1. when selecting month in one it should not include in other selection
+        1. ~~when selecting month in one it should not include in other selection~~
 
 FUNCTIONALITY:
 1. ~~ add expected values and percents for categories ( Example: transport : 20% - 200eur) ~~
@@ -47,7 +47,9 @@ FUNCTIONALITY:
 3. ~~ Try to cooperate more Rust into project ~~ 
 4. ~~make an error flash messaging~~
 5. Maybe make it possible to manipulate saved files: edit, delete 
-6. when processing file and something is not put in category (something is still unfiltered), then make it stand out in file view, example put (!) next to filename
+6. ~~when processing file and something is not put in category (something is still unfiltered), then make it stand out in file view, example put (!) next to filename~~
+    1. ~~it needs to remove (!) once there is no more unfiltered items.~~
+7. When saving proccess file, it should update the processed file list
 
 VISUALS:
 Update all view for make it more modern and professional

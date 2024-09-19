@@ -47,8 +47,6 @@ const buildYearGraph = async () => {
 }
 
 const getMonthGraphData = async (path, option) => {
-    console.log(path);
-    
    if (await exists(path)){
     const planned_percentages = JSON.parse(await readFileContents(EXPENDITURE_SETTINGS_PATH));
     let data = JSON.parse(await readFileContents(path));
@@ -58,6 +56,11 @@ const getMonthGraphData = async (path, option) => {
         second_option_month_data.value = buildOverView(data, planned_percentages);
     }
   }
+}
+
+const exludeOthenMonthFile = (path) => {
+    if (path == null || path == undefined) return
+    return processed_files.value.filter(file => path.split('/').slice(-1) != file.name)
 }
 
 onMounted(async () => {
@@ -92,14 +95,14 @@ watch([first_option_month_path,second_option_month_path], async() => {
         <div class="flex">
             <div class="graph_box">
                 <select v-model="first_option_month_path">
-                    <option v-for="file in processed_files" :value="file.path">{{file.name}}</option>
+                    <option v-for="file in exludeOthenMonthFile(second_option_month_path)" :value="file.path">{{file.name}}</option>
                 </select>
                 <LineChart  class="graph" v-if="first_option_month_data && second_option_month_data" :expenditures="first_option_month_data"/> 
             </div>
             <p>VS</p>
             <div class="graph_box">
                 <select v-model="second_option_month_path">
-                    <option v-for="file in processed_files" :value="file.path">{{file.name}}</option>
+                    <option v-for="file in exludeOthenMonthFile(first_option_month_path)" :value="file.path">{{file.name}}</option>
                 </select>
                 <LineChart  class="graph" v-if="first_option_month_data && second_option_month_data" :expenditures="second_option_month_data"/> 
             </div>
