@@ -86,8 +86,10 @@ const saveProcessFile = async (source_path, fileContent) => {
       { type: 'info', okLabel: 'Yes', cancelLabel: 'No' }
     );
     if (!answer) return;
-
-    const removable_file = saving_path.includes('(!)') ? destination_path : destination_path + '(!)';
+  }
+  
+  const removable_file = saving_path.includes('(!)') ? destination_path : destination_path + '(!)';
+  if (await exists(removable_file)) {
     await remove_file(removable_file);
   }
     

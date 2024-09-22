@@ -6,7 +6,8 @@ This template should help get you started developing with Tauri + Vue 3 in Vite.
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
-To run application on dev mode: npm run tauri dev
+To run application on dev mode: 
+* npm run tauri dev
 
 
 For Graphs using currently (deside on one):
@@ -49,11 +50,12 @@ FUNCTIONALITY:
 5. Maybe make it possible to manipulate saved files: edit, delete 
 6. ~~when processing file and something is not put in category (something is still unfiltered), then make it stand out in file view, example put (!) next to filename~~
     1. ~~it needs to remove (!) once there is no more unfiltered items.~~
-7. When saving proccess file, it should update the processed file list
+7. ~~When saving proccess file, it should update the processed file list~~
+8. Make a Quick Tutorial/Guide, how systems work.
 
 VISUALS:
 Update all view for make it more modern and professional
-1. options view - improvments needed
-2. processed file view  - improvments needed
-3. regular view
-4. possibility to hide sidepanel
+1. Update Sidebar buttons with icons and make it more user friendly (maybe possible to add popUp, do tell what some button does)
+2. OverView a bit better
+3. Make processed view better
+4. Change colorScheme

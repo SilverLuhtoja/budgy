@@ -36,8 +36,8 @@ const toggleMoreDetails = (key) => {
 
 const closeVisibleDetails = () => { visibleDetails.value = []}
 
-const openDetails = () => { 
-    for (let category of Object.keys(content)){
+const openDetails = () => {
+    for (let category of Object.keys(content.value)){
        visibleDetails.value.push(category);
     }
 }
@@ -145,7 +145,6 @@ onBeforeUnmount(() => {
 }
 
 .month{
-    text-decoration: underline;
     margin: 0.5em;
 }
 

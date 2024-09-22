@@ -60,15 +60,16 @@ const processFile = async () => {
     }
     
     store.dispatch('setViewContent', content)
-    saveProcessFile(processedFilename.value, content)
+    await saveProcessFile(processedFilename.value, content)
+    await updateFiles()
 };
 
 const onClickOutside = e => {
   if (e.target.tagName == "BUTTON" || isEmptyValue(currentSelectedFile.value)) return
 
   const notProcessedFile = currentSelectedFile.value.split('.').length != 1
-  if (!e.target.classList.contains('file') && notProcessedFile) {
-    store.dispatch('setCurrentSelectedFile', '')
+  if (!e.target.classList.contains('file') && e.target.classList.contains('side_panel')) {
+    // store.dispatch('setCurrentSelectedFile', '')
     store.dispatch('setViewContent', '')
   }
 };
