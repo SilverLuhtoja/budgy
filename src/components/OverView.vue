@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import OverViewChart from './graphs/OverviewChart.vue';
+import DifferenceChart from './graphs/DifferenceChart.vue';
 import { buildOverView, getMonthData, getProcessedAvailableYears } from '../utils/graph_scripts';
-import { EST_MONTHS, EXPENDITURE_SETTINGS_PATH, PROCESSED_FILE_PATH, readDirPath, readFileContents } from '../utils/file_scripts';
-import LineChart from './graphs/LineChart.vue';
+import { EST_MONTHS, EXPENDITURE_SETTINGS_PATH, extractMonthYear, PROCESSED_FILE_PATH, readDirPath, readFileContents } from '../utils/file_scripts';
 import { exists } from '@tauri-apps/api/fs';
 
 const current_year = ref(new Date().getFullYear())
@@ -82,53 +82,80 @@ watch([first_option_month_path,second_option_month_path], async() => {
 </script>
 
 <template>
-    <div>
-         <h3> OVERVIEW - {{ current_year }} </h3>
-         <div class="flex" >
-            <button v-for="year in availableProcessedYears" :key="year" @click="current_year = year"> {{year}} </button>
+    <section class="overview_wrapper">
+        <div class="overview_graph">
+            <h3> OVERVIEW - {{ current_year }} </h3>
+            <div class="flex" >
+                <button v-for="year in availableProcessedYears" :key="year" @click="current_year = year"> {{year}} </button>
+            </div>
+            <OverViewChart :month_data="month_data" :month_total_data="month_total_data"/>
         </div>
-        <OverViewChart :month_data="month_data" :month_total_data="month_total_data"/>
-    </div>
-
-    <div>
-        <h3> COMPARE MONTH to MONTH </h3>
-        <div class="flex">
-            <div class="graph_box">
+        
+        <div class="comparison_box">
+            <h3> COMPARE MONTH to MONTH </h3>
+            <div class="flex">
                 <select v-model="first_option_month_path">
                     <option v-for="file in exludeOthenMonthFile(second_option_month_path)" :value="file.path">{{file.name}}</option>
                 </select>
-                <LineChart  class="graph" v-if="first_option_month_data && second_option_month_data" :expenditures="first_option_month_data"/> 
-            </div>
-            <p>VS</p>
-            <div class="graph_box">
+                <DifferenceChart v-if="first_option_month_data && second_option_month_data" class="graph" 
+                    :first_month_expenditures="first_option_month_data" 
+                    :second_month_expenditures="second_option_month_data" 
+                    :months="[extractMonthYear(first_option_month_path)[0], extractMonthYear(second_option_month_path)[0]]" 
+                />
+                <div class="graph flex" v-else>Select Months To Show Graph</div>
                 <select v-model="second_option_month_path">
                     <option v-for="file in exludeOthenMonthFile(first_option_month_path)" :value="file.path">{{file.name}}</option>
                 </select>
-                <LineChart  class="graph" v-if="first_option_month_data && second_option_month_data" :expenditures="second_option_month_data"/> 
             </div>
         </div>
-
-      
-    </div>
+    </section>
 </template>
 
 <style scoped>
-.flex {
+.overview_wrapper {
     display: flex;
-    align-items: center;
-
+    flex-direction: column;
+    place-items: center;
 }
+
+.overview_graph, .comparison_box{
+    width: 84vw;
+    padding: 1em;
+    background: rgba(148, 181, 182, 0.911);
+}
+
+.comparison_box .flex {
+    display: flex;
+    justify-content: center;
+    place-items: center;
+}
+
 .flex button {
     width: 4em;
     margin: 0.2em;
 }
 
+select {
+    padding: 0.5em;
+}
+
+.comparison_box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    place-items: center;
+    text-align: center;
+    margin-top: 2em;
+}
+
+.comparison_box .flex select{
+    margin: 2em;
+}
+
 .graph{
   margin: 1em;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.342);
-}
-
-.graph_box{
-    text-align: center
+  width: 800px;
+  height: 400px;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, defineProps, onMounted} from 'vue'
 
-const { current_month_expenditures, last_month_expenditures, months  } = defineProps(['current_month_expenditures', 'last_month_expenditures', 'months'])
+const { first_month_expenditures, second_month_expenditures, months  } = defineProps(['first_month_expenditures', 'second_month_expenditures', 'months'])
 const current_month_expendings = ref([])
 const last_month_expendings = ref([])
 const series = ref([
@@ -41,9 +41,9 @@ const chartOptions = ref({
   })
 
 onMounted(() => {
-    chartOptions.value.xaxis.categories = current_month_expenditures.map(item => item.name)
-    current_month_expendings.value = current_month_expenditures.map(item => item.actual_total)
-    last_month_expendings.value = last_month_expenditures.map(item => item.actual_total)
+    chartOptions.value.xaxis.categories = first_month_expenditures.map(item => item.name)
+    current_month_expendings.value = first_month_expenditures.map(item => item.actual_total)
+    last_month_expendings.value = second_month_expenditures.map(item => item.actual_total)
 })
 </script>
 

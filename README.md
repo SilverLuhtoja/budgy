@@ -61,4 +61,5 @@ Update all view for make it more modern and professional
 
 
 FINALLY: 
-When VISUALS update then make a Quick Tutorial/Guide, how systems work.
+1. Make it installable in Windows/Linux
+2. When VISUALS update then make a Quick Tutorial/Guide, how systems work.

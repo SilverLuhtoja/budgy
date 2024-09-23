@@ -64,7 +64,7 @@ watch(data,
         </div>
         <RadialBarChart class="graph" :expenditures="expenditures" />
         <LineChart class="graph" :expenditures="expenditures" />
-        <DifferenceChart v-if="last_month_expenditures" class="graph" :current_month_expenditures="expenditures" :last_month_expenditures="last_month_expenditures" :months="months" />
+        <DifferenceChart v-if="last_month_expenditures" class="graph" :first_month_expenditures="expenditures" :second_month_expenditures="last_month_expenditures" :months="months" />
       </div>
     </main>
 </template>
