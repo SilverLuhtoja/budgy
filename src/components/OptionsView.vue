@@ -110,7 +110,7 @@ onMounted( async () => {
 
         <div class="add_category_wrapper">
             <input v-model="category_name" placeholder="Enter a category name..." />
-            <button @click="addCategoryHandler">add category</button>
+            <button @click="addCategoryHandler" class="save_btn"> Add category </button>
         </div>
 
         <div class="flex category" v-for="(value,key) in configurations" :key="key">
@@ -165,8 +165,8 @@ onMounted( async () => {
 }
 
 .category{
-    background-color: rgba(250, 235, 215, 0.829);
-    border: 4px solid rgba(250, 215, 169, 0.801);
+    background-color: rgba(255, 255, 255, 0.692);
+    margin: 0.3em 0;
 }
 
 .category_name{
@@ -185,14 +185,15 @@ onMounted( async () => {
 }
 
 .save_btn{
-    background: rgb(131, 206, 108);
+    background: rgb(240, 226, 101);
     margin: 0.3em 0;
     padding: 0.5em;
-    border: hidden;
+    font-weight: 900;
+    border: 1px solid rgb(255, 255, 255);
 }
 
 .save_btn:hover{
-    background: rgb(128, 240, 128);
+    background: rgba(252, 245, 159);
     box-shadow: 1px 1px 2px black;
 }
 
@@ -200,7 +201,7 @@ onMounted( async () => {
     padding: 0 0.5em;
     margin-right:  0.5em;
     background: rgb(241, 128, 34);
-    border: hidden;
+    border: 1px solid rgb(255, 255, 255);
 }
 .remove_category_btn:hover{
     background: rgb(255, 159, 80);
@@ -213,15 +214,6 @@ onMounted( async () => {
 
 .add_category_wrapper input, button {
     padding: 0.3em;
-}
-
-.add_category_wrapper  button {
-    background: rgb(131, 206, 108);
-}
-
-.add_category_wrapper  button:hover{
-    background: rgb(128, 240, 128);
-    box-shadow: 1px 1px 2px black;
 }
 
 .saved_option{

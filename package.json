@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.5.6",
     "apexcharts": "^3.51.0",
+    "oh-vue-icons": "^1.0.0-rc3",
     "vue": "^3.3.4",
     "vue-apexcharts": "^1.6.2",
     "vue3-apexcharts": "^1.5.3",

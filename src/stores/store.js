@@ -44,19 +44,12 @@ export default createStore({
       let oldState = this.state.currentView;
       if (oldState === value) {
         commit('changeCurrentViewToDefault');
-        // console.log(
-        //   `currentView state changed from ${oldState} to ${this.state.currentView}`
-        // );
         return;
       }
       commit('changeCurrentView', value);
-      // console.log(
-      //   `currentView state changed from ${oldState} to ${this.state.currentView}`
-      // );
     },
 
     setViewContent({ commit }, value) {
-      // console.log(`viewContent updated`);
       commit('changeViewContent', value);
     },
 
@@ -64,9 +57,6 @@ export default createStore({
       let oldState = this.state.currentSelectedFile;
       if (oldState !== value) {
         commit('changeCurrentSelectedFile', value);
-        console.log(
-          `CurrentSelectedFile state changed from ${oldState} to ${this.state.currentSelectedFile}`
-        );
       }
     },
 

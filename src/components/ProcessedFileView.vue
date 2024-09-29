@@ -45,14 +45,12 @@ const openDetails = () => {
 const handleKeyDown = (event) => {
   pressedKeys.value.add(event.key);
   if (pressedKeys.value.has('Shift') && pressedKeys.value.has('A')) {
-    console.log('Shift+A combination detected');
     quickSaveHighlightedText()
   }
 }
 
 const  handleKeyUp = (event) => {
   pressedKeys.value.delete(event.key);
-  console.log('Keys released:', [...pressedKeys.value]);
 }
 
 const quickSaveHighlightedText = async () => {
@@ -95,7 +93,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main v-if="isPlainObject(content)">
+    <main v-if="isPlainObject(content)" class="wrapper">
         <h1 v-if="currentSelectedFile" class="month">
             {{ currentSelectedFile.toUpperCase() }}
         </h1>
@@ -145,13 +143,16 @@ onBeforeUnmount(() => {
 }
 
 .month{
+    display: inline-block;
     margin: 0.5em;
+    padding: 0.5em;
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .category_card{
     margin: 1em 0.3em;
     padding: 0.25em;
-    background: rgb(216, 216, 216);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .option_btn{
@@ -169,16 +170,17 @@ onBeforeUnmount(() => {
     margin: 1em;
     cursor: pointer;
     padding: 0.3em;
-    background: rgb(180, 180, 180);
+    background: rgb(253, 253, 253);
 }
 
 .item:hover{
-    background: rgb(134, 134, 134);
+    background: rgba(243, 238, 174, 0.952);
+    box-shadow: 1px 1px 2px 0  rgb(0, 0, 0);
 }
 
 .section_divider{
     height: 5px;
-    background: rgb(39, 63, 39);
+    background: rgba(57,66,60);
     margin: 0 auto;
     width: 100%;
 }

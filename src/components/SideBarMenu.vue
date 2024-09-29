@@ -87,10 +87,24 @@ onUnmounted(() => {
 <template>
   <main class="side_panel">
     <div class="flex">
-      <button v-if="isDefaultView" @click="readFile()">+ FILE</button>
-      <button v-if="isDefaultView && currentSelectedFile && isCSVFile()" @click="processFile"> Process </button>
-      <button  @click="store.dispatch('setCurrentView', 'options')"> {{store.getters.currentView != Views.OPTIONS ? "~" : "X"}} Options</button>
-      <button  @click="store.dispatch('setCurrentView', 'overview')"> {{ store.getters.currentView != Views.OVERVIEW ? "~" : "X"}} Overview</button>
+      <button v-if="isDefaultView" @click="readFile()">
+        <v-icon name="bi-folder-plus" scale="2" />
+      </button>
+
+      <button v-if="isDefaultView && currentSelectedFile && isCSVFile()" @click="processFile">
+         <v-icon name="gi-processor" scale="2" animation="pulse" hover />
+      </button>
+
+      <button  @click="store.dispatch('setCurrentView', 'options')"> 
+        <v-icon v-if="store.getters.currentView != Views.OPTIONS" name="io-options-outline" scale="2"  />
+        <v-icon v-else name="io-options-sharp" scale="2"  />
+        <v-icon v-else name="io-close-sharp" scale="2" />
+      </button>
+
+      <button  @click="store.dispatch('setCurrentView', 'overview')"> 
+        <v-icon v-if="store.getters.currentView != Views.OVERVIEW" name="md-removeredeye-outlined" scale="2"  />
+        <v-icon v-else name="io-close-sharp" scale="2" />
+      </button>
     </div>
 
     <section > 
@@ -104,7 +118,7 @@ onUnmounted(() => {
 .side_panel {
   width: 12vw;
   height: 100%;
-  background: rgba(57,66,60);
+  background: var(--sidebar-section-bg);
   color: white;
   padding: 0 1em;
   position: fixed;

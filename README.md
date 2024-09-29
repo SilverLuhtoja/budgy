@@ -54,12 +54,12 @@ FUNCTIONALITY:
 
 VISUALS:
 Update all view for make it more modern and professional
-1. Update Sidebar buttons with icons and make it more user friendly (maybe possible to add popUp, do tell what some button does)
-2. OverView a bit better
-3. Make processed view better
-4. Change colorScheme
+1. ~~Update Sidebar buttons with icons~~
+2. ~~OverView a bit better~~
+3. ~~Make processed view better~~
+4. ~~Change colorScheme~~
 
 
 FINALLY: 
-1. Make it installable in Windows/Linux
+1. Make it installable on Windows/Linux
 2. When VISUALS update then make a Quick Tutorial/Guide, how systems work.

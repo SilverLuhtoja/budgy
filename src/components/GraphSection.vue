@@ -54,11 +54,11 @@ watch(data,
         <div class="overview_wrapper">
           <h2>OverView</h2>
           <div v-for="item in expenditures" :key="item.name">
-            <div class="box">
+            <div class="box" v-if="item.planned_percent != 0">
               <h4>{{ item.name }}</h4>
               <p> Planned expenditure: {{ item.planned_total }} - {{ item.planned_percent }}%</p>
               <p> Actual expenditure: {{ item.actual_total }} - {{ item.actual_percent }}%</p>
-              <p :class="item.difference_total > 0 ? 'green' : 'red' "> Difference : {{ item.difference_total }} EUR > [{{ item.difference_percent }}%]</p>
+              <p class="difference_box" :class="item.difference_total > 0 ? 'green' : 'red' "> Difference : {{ item.difference_total }} EUR > [{{ item.difference_percent }}%]</p>
             </div>
           </div>
         </div>
@@ -70,12 +70,19 @@ watch(data,
 </template>
 
 <style scoped>
+
+.difference_box{
+  color: white;
+  padding: 0.2em;
+  font-weight: 900;
+}
+
 .green{
-  color: green;
+  background: rgba(0, 128, 0, 0.7);
 }
 
 .red{
-  color: red;
+  background: rgba(255, 0, 0, 0.7);
 }
 
 .flex{ 
@@ -88,15 +95,26 @@ watch(data,
   margin: 0.25em;
   padding: 0.25em;
 }
+.box h4{
+  margin-bottom: 0.3em;
+  text-decoration: underline;
+}
+
+.box p{
+  margin-bottom: 0.2em;
+}
 
 .overview_wrapper{
   margin: 1em;
+  padding: 0.3em;
   min-width: 20em;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.342);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .graph{
   margin: 1em;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.342);
+  background: rgba(255, 255, 255, 0.6);
 }
 </style>

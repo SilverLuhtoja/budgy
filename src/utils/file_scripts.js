@@ -202,7 +202,6 @@ const createDirPath = async dir_path => {
     if (isOriginalDir) return;
 
     await createDir(dir_path, { recursive: true });
-    console.log('directory created : ', dir_path);
   } catch (err) {
     console.error(err);
   }

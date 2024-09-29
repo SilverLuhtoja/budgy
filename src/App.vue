@@ -31,7 +31,7 @@ onMounted(async () => {
 <template>
   <main class="row">
       <div v-if="errorMessage" class="flash_message">
-        <h3> {{ errorMessage }} </h3>
+        <p> {{ errorMessage }} </p>
       </div>
       <SideBarMenu  />
       <ViewSection  />
@@ -39,6 +39,11 @@ onMounted(async () => {
 </template>
 
 <style>
+:root{
+  --view-section-bg: rgb(141, 173, 152);
+  --sidebar-section-bg: rgba(57,66,60);
+}
+
 *{
   margin: 0;
   padding: 0;
@@ -46,15 +51,17 @@ onMounted(async () => {
 
 .row {
   display: flex;
+  background: var(--view-section-bg);
+  min-height: 100vh;
 }
 
 .flash_message{
   position: absolute;
-  top: 0;
-  left: 25%;
-  width: 60em;
-  height: 10em;
-  background: red;
+  top: 1em;
+  right: 1em;
+  min-width: 30em;
+  height: 5em;
+  background: rgba(255, 16, 16, 0.719);
   display: flex;
   justify-content: center;
   align-items: center;

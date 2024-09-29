@@ -121,7 +121,7 @@ watch([first_option_month_path,second_option_month_path], async() => {
 .overview_graph, .comparison_box{
     width: 84vw;
     padding: 1em;
-    background: rgba(148, 181, 182, 0.911);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .comparison_box .flex {

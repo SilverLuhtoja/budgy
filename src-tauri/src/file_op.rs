@@ -5,9 +5,9 @@ use std::fs::read_to_string;
 
 #[tauri::command]
 pub async fn write_file(path: String, content: String) -> Result<String, String> {
-    if Path::new(&path).exists(){
-        println!("File already exists");
-    }
+    // if Path::new(&path).exists(){
+        // println!("File already exists");
+    // }
 
     match File::create(&path).and_then(|mut file| file.write_all(content.as_bytes())) {
         Ok(_) => Ok("Write succesful".to_string()),

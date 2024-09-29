@@ -55,6 +55,6 @@ onMounted(() => {
 
 <style scoped>
 .line_chart{
-  min-width: 32em;
+  min-width: 50em;
 }
 </style>
