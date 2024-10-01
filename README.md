@@ -11,8 +11,7 @@ To run application on dev mode:
 
 
 For Graphs using currently (deside on one):
-1. npm install vue3-charts
-2. or npm install apexcharts and npm install vue-apexcharts and nom install vue3-apexcharts (https://apexcharts.com/vue-chart-demos/)
+Npm install apexcharts and npm install vue-apexcharts and nom install vue3-apexcharts (https://apexcharts.com/vue-chart-demos/)
 
 
 This is MVP roadmap:
