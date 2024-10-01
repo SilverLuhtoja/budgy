@@ -60,5 +60,9 @@ Update all view for make it more modern and professional
 
 
 FINALLY: 
-1. Make it installable on Windows/Linux
-2. When VISUALS update then make a Quick Tutorial/Guide, how systems work.
+1. Make it installable on 
+    1. ~~Windows~~
+    2. Linux
+2. Fix bugs:
+    1. File path problems
+3. When VISUALS update then make a Quick Tutorial/Guide, how systems work.

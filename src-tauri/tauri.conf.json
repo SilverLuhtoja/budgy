@@ -12,6 +12,9 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "path": {
+        "all": true
+      },
       "dialog": {
         "all": true,
         "ask": true,
@@ -63,7 +66,7 @@
       "active": true,
       "targets": ["msi"],
       "identifier": "Budgy",
-      "icon": ["icons/32x32.png", "icons/128x128.png"],
+      "icon": ["icons/icon.ico", "icons/32x32.png", "icons/128x128.png"],
       "windows": {
         "wix": {
           "language": "en-US"
