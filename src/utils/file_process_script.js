@@ -1,4 +1,5 @@
-import { CONFIGURATIONS_FILE_PATH, readFileContents } from './file_scripts';
+import { readFileContents } from './file_scripts';
+import paths from '../routes/pathManager.js'
 
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
@@ -19,7 +20,7 @@ const processStatment = async fileContent => {
 };
 
 const filterExpenses = async data => {
-  const optionsData = JSON.parse( await readFileContents(CONFIGURATIONS_FILE_PATH));
+  const optionsData = JSON.parse( await readFileContents(paths.CONFIGURATIONS_FILE_PATH));
   let entries = Object.entries(optionsData);
   let not_filtered_list = []
   let SumUpCategories = {};
@@ -74,7 +75,9 @@ const roundUpToDecimalsByTwo = (num) => {
 };
 
 function isMatch(values, data_row, filterIndexes) {
-  const pattern = new RegExp(`\\b(${values.join('|')})\\b`, 'i');
+  // const pattern = new RegExp(`\\b(${values.join('|')})\\b`, 'i')
+  const pattern = new RegExp(`(?:\\W|^)(${values.join('|')})(?:\\W|$)`, 'i');;
+  
   if (pattern.test(data_row[filterIndexes[0]]) || pattern.test(data_row[filterIndexes[1]])) {
     return true;
   }

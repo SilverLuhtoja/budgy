@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
-import { saveConfigurationFile, getConfigurations, CONFIGURATIONS_FILE_PATH } from '../utils/file_scripts';
+import { saveConfigurationFile, getConfigurations } from '../utils/file_scripts';
 import GraphSection from './GraphSection.vue';
 import { write_file } from '../utils/rust_file_scripts';
 import { useStore } from 'vuex';
+import paths from '../routes/pathManager.js'
 
 const store = useStore();
 const visibleDetails = ref([]);
@@ -61,7 +62,7 @@ const quickSaveHighlightedText = async () => {
     let values = configurations['saved-options']
     if (values === undefined) {
         configurations['saved-options'] = [saveable]
-        write_file(CONFIGURATIONS_FILE_PATH, configurations)
+        write_file(paths.CONFIGURATIONS_FILE_PATH, configurations)
         return
     }
     

@@ -64,5 +64,6 @@ FINALLY:
     1. ~~Windows~~
     2. Linux
 2. Fix bugs:
-    1. File path problems
+    1. ~~File path problems~~
+    2. ~~minor bugs~~
 3. When VISUALS update then make a Quick Tutorial/Guide, how systems work.

@@ -18,6 +18,10 @@ export const create_dir = async path => {
   return await invoke('create_dir', { path });
 };
 
+export const create_dir_all = async path => {
+  return await invoke('create_dir_all', { path });
+};
+
 export const create_file = async path => {
   return await invoke('create_file', { path });
 };

@@ -3,8 +3,9 @@ import { onMounted, ref, watch } from 'vue';
 import OverViewChart from './graphs/OverviewChart.vue';
 import DifferenceChart from './graphs/DifferenceChart.vue';
 import { buildOverView, getMonthData, getProcessedAvailableYears } from '../utils/graph_scripts';
-import { EST_MONTHS, EXPENDITURE_SETTINGS_PATH, extractMonthYear, PROCESSED_FILE_PATH, readDirPath, readFileContents } from '../utils/file_scripts';
+import { EST_MONTHS, extractMonthYear, readDirPath, readFileContents } from '../utils/file_scripts';
 import { exists } from '@tauri-apps/api/fs';
+import paths from '../routes/pathManager';
 
 const current_year = ref(new Date().getFullYear())
 const availableProcessedYears = ref([])
@@ -28,13 +29,13 @@ const calculateCategoryTotal = (data) => {
 }
 
 const getProcessedFiles = async () => {
-    processed_files.value = await readDirPath(PROCESSED_FILE_PATH);
+    processed_files.value = await readDirPath(paths.PROCESSED_FILE_PATH);
 }
 
 const buildYearGraph = async () => {
     month_data.value.fill([])
     month_total_data.value.fill(0)
-    const planned_percentages = JSON.parse(await readFileContents(EXPENDITURE_SETTINGS_PATH));
+    const planned_percentages = JSON.parse(await readFileContents(paths.EXPENDITURE_SETTINGS_PATH));
     
     EST_MONTHS.forEach(async (month, idx) => {
         const data = await getMonthData(month, current_year.value)
@@ -48,7 +49,7 @@ const buildYearGraph = async () => {
 
 const getMonthGraphData = async (path, option) => {
    if (await exists(path)){
-    const planned_percentages = JSON.parse(await readFileContents(EXPENDITURE_SETTINGS_PATH));
+    const planned_percentages = JSON.parse(await readFileContents(paths.EXPENDITURE_SETTINGS_PATH));
     let data = JSON.parse(await readFileContents(path));
     if (option == "first"){
         first_option_month_data.value = buildOverView(data, planned_percentages);

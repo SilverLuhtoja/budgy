@@ -3,32 +3,29 @@ import {
   readTextFile,
   exists,
   createDir,
-  copyFile,
   readDir,
   writeFile,
 } from '@tauri-apps/api/fs';
 import { remove_file } from './rust_file_scripts';
+import paths from '../routes/pathManager';
 
 export const EST_MONTHS = ['jaanuar', 'veebruar', 'märts', 'aprill', 'mai', 'juuni', 'juuli', 'august', 'september', 'oktoober', 'november', 'detsember']
 const YEAR_SUFFIX = ['2023','2024', '2025']
 
-export const ORGINAL_FILE_PATH = `./resources/original_files`;
-export const PROCESSED_FILE_PATH = `./resources/processed_files`;
-export const CONFIG_FILE_PATH = `./resources/configurations`
-export const CONFIGURATIONS_FILE_PATH = `${CONFIG_FILE_PATH}/configurations.json`;
-export const EXPENDITURE_SETTINGS_PATH = `${CONFIG_FILE_PATH}/expenditure_settings.json`;
-
 const getFileName = path => {
   let splitted = path.split('/');
+  if (path.includes('\\'))  {
+    splitted = path.split('\\')
+  }
   return splitted[splitted.length - 1];
 };
 
 const getFileNameInOriginalDir = path => {
-  return ORGINAL_FILE_PATH + '/' + getFileName(path);
+  return paths.ORIGINAL_FILE_PATH + '/' + getFileName(path);
 };
 
 const createOriginalFile = async source_path => {
-  const destination_path = ORGINAL_FILE_PATH + '/' + getFileName(source_path);
+  const destination_path = paths.ORIGINAL_FILE_PATH + '/' + getFileName(source_path);
   const isOriginalFile = await exists(destination_path);
   if (isOriginalFile) {
     const answer = await ask(
@@ -76,7 +73,7 @@ const replaceCommasInsideQuotes = line => {
 
 const saveProcessFile = async (source_path, fileContent) => {
   if (!source_path) return
-  const destination_path = PROCESSED_FILE_PATH + '/' + source_path;
+  const destination_path = paths.PROCESSED_FILE_PATH + '/' + source_path;
   const isOriginalFile = await exists(destination_path);
   const saving_path = anyNotFilteredContent(fileContent) ? destination_path + '(!)' : destination_path;
 
@@ -108,18 +105,19 @@ const anyNotFilteredContent = fileContent => {
 };
 
 const getConfigurations = async () => {
-  let isCreated = await exists(CONFIGURATIONS_FILE_PATH);
+  const configPath = paths.CONFIGURATIONS_FILE_PATH
+  let isCreated = await exists(configPath);
   if (!isCreated) {
     let default_configs = {
       "INCOME" : []
     }
     await writeFile({
-      path: CONFIGURATIONS_FILE_PATH,
+      path: configPath,
       contents: JSON.stringify(default_configs, null, 2),
     });
     return;
   }
-  return await readTextFile(CONFIGURATIONS_FILE_PATH);
+  return await readTextFile(configPath);
 }
 
 const saveConfigurationFile = async (configurations) => {
@@ -127,7 +125,7 @@ const saveConfigurationFile = async (configurations) => {
 
   try {
     await writeFile({
-      path: CONFIGURATIONS_FILE_PATH,
+      path:  paths.CONFIGURATIONS_FILE_PATH,
       contents: JSON.stringify(configurations, null, 2),
     });
   } catch (err) {
@@ -136,15 +134,16 @@ const saveConfigurationFile = async (configurations) => {
 }
 
 const getExpenditureConfigurations = async () => {
-  let isCreated = await exists(EXPENDITURE_SETTINGS_PATH);
+  const expenditurePath = paths.EXPENDITURE_SETTINGS_PATH
+  let isCreated = await exists(expenditurePath);
   if (!isCreated) {
     await writeFile({
-      path: EXPENDITURE_SETTINGS_PATH,
+      path: expenditurePath,
       contents: JSON.stringify({}, null, 2),
     });
     return;
   }
-  return await readTextFile(EXPENDITURE_SETTINGS_PATH);
+  return await readTextFile(expenditurePath);
 };
 
 const saveExpenditureConfigurations = async configurations => {
@@ -152,7 +151,7 @@ const saveExpenditureConfigurations = async configurations => {
 
   try {
     await writeFile({
-      path: EXPENDITURE_SETTINGS_PATH,
+      path: paths.EXPENDITURE_SETTINGS_PATH,
       contents: JSON.stringify(configurations, null, 2),
     });
   } catch (err) {

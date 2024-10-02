@@ -37,6 +37,9 @@ const chartOptions = ref({
     xaxis: {
       categories: EST_MONTHS,
     },
+    yaxis: {
+      decimalsInFloat: false,
+    },
     tooltip: {
       style: {
         fontSize: '30px',

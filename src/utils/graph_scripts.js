@@ -1,6 +1,7 @@
 import { exists } from "@tauri-apps/api/fs";
-import { EST_MONTHS, extractMonthYear, PROCESSED_FILE_PATH, readDirPath, readFileContents } from "./file_scripts";
+import { EST_MONTHS, extractMonthYear, readDirPath, readFileContents } from "./file_scripts";
 import { roundUpToDecimalsByTwo } from "./file_process_script";
+import paths from '../routes/pathManager.js'
 
 export const getPlannedSpendingTotal = (total, planned_expending_weight) =>
   total * 0.01 * planned_expending_weight;
@@ -20,20 +21,21 @@ export const getLastMonthFilename = (currentMonthFilename) => {
 }
 
 export const getMonthData = async (month, year) => {
-  const path = `${PROCESSED_FILE_PATH}/${month}_${year}`.toLowerCase();
+  const path = `${paths.PROCESSED_FILE_PATH}/${month}_${year}`.toLowerCase();
   if (await exists(path)) {
     return JSON.parse(await readFileContents(path));
   }
 };
 
 export const getProcessedAvailableYears = async () => {
-    let files = await readDirPath(PROCESSED_FILE_PATH);
+    let files = await readDirPath(paths.PROCESSED_FILE_PATH);
     return new Set(files.map(file => extractMonthYear(file.name)[1]).sort());
 }
 
 export const buildOverView = (data, expen_settings) => {
   let planned_totals = [];
-  if (data['INCOME'] != undefined || data['INCOME'] == null) {
+  
+  if (data['INCOME'] != undefined || data['INCOME'] != null) {
     let total_income = data['INCOME'].total;
     for (let key in expen_settings) {
       // dont count in expenditure which key value is 0

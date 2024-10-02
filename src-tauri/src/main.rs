@@ -14,6 +14,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             greet,
             file_op::create_dir,
+            file_op::create_dir_all,
             file_op::create_file, 
             file_op::read_file, 
             file_op::write_file,
