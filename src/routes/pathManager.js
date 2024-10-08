@@ -1,24 +1,17 @@
 import { appLocalDataDir } from '@tauri-apps/api/path';
 
 class PathManager {    
-    static instance = null;
-
-    // Private constructor to prevent instantiation
     constructor() {
         if (PathManager.instance) {
-        throw new Error("Use PathManager.getInstance() to get the singleton instance.");
+            return PathManager.instance;
         }
-
-        this.paths = null;
+        PathManager.instance = this;
+        this.paths = null; 
     }
 
-    static async getInstance() {
-        if (!PathManager.instance) {
-            PathManager.instance = new PathManager();
-          await PathManager.instance.initPaths(); // Initialize paths when first created
-        }
-        return PathManager.instance;
-      }
+    getPaths() {
+        return this.paths;
+    }
 
      // Private method to initialize paths
     async initPaths() {
@@ -32,21 +25,7 @@ class PathManager {
             EXPENDITURE_SETTINGS_PATH: `${appDir}resources/configurations/expenditure_settings.json`,
         };
     }
-
-    // Public getter method to access paths
-    getPaths() {
-        if (!this.paths) {
-            throw new Error("Paths have not been initialized yet.");
-        }
-        return this.paths;
-    }
 }
 
-// Asynchronous export of the paths
-const initRouteManagerPaths = async () => {
-    const manager = await PathManager.getInstance();
-    
-    return manager.paths;
-  };
-
-export default await initRouteManagerPaths() 
+const pathManager = new PathManager();
+export default pathManager;

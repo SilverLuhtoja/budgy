@@ -1,5 +1,5 @@
 import { readFileContents } from './file_scripts';
-import paths from '../routes/pathManager.js'
+import pathManager from '../routes/pathManager.js'
 
 const OPTIONS_ERROR = 'ERROR: Options are invalid for this file';
 const NO_COLUMN_ERROR = 'ERROR: No column available';
@@ -20,7 +20,7 @@ const processStatment = async fileContent => {
 };
 
 const filterExpenses = async data => {
-  const optionsData = JSON.parse( await readFileContents(paths.CONFIGURATIONS_FILE_PATH));
+  const optionsData = JSON.parse( await readFileContents(pathManager.paths.CONFIGURATIONS_FILE_PATH));
   let entries = Object.entries(optionsData);
   let not_filtered_list = []
   let SumUpCategories = {};

@@ -8,7 +8,7 @@ import DifferenceChart from './graphs/DifferenceChart.vue';
 import { useStore } from 'vuex';
 import { exists } from '@tauri-apps/api/fs';
 import { isEmptyValue } from '../utils/helpers';
-import paths from '../routes/pathManager';
+import pathManager from '../routes/pathManager';
 
 const store = useStore();
 const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
@@ -22,7 +22,7 @@ const dataReady = ref(false);
 const getLastMonthData = async () => {
   let lastMonthFilename = getLastMonthFilename(currentSelectedFile.value)
   months.value = [extractMonthYear(currentSelectedFile.value)[0], extractMonthYear(lastMonthFilename)[0] ]
-  const path = `${paths.PROCESSED_FILE_PATH}/${lastMonthFilename}`
+  const path = `${pathManager.paths.PROCESSED_FILE_PATH}/${lastMonthFilename}`
    if (await exists(path)){
      return JSON.parse(await readFileContents(path));
   }
@@ -31,7 +31,7 @@ const getLastMonthData = async () => {
 watch(data,
   async (newData) => {
       dataReady.value = false;
-      const planned_percentages = JSON.parse(await readFileContents(paths.EXPENDITURE_SETTINGS_PATH));
+      const planned_percentages = JSON.parse(await readFileContents(pathManager.paths.EXPENDITURE_SETTINGS_PATH));
       const overviewData = buildOverView(newData, planned_percentages);
       expenditures.value = overviewData;
 

@@ -51,8 +51,13 @@ const chartOptions= ref({
             }]
           })
 
+const removeNotPlannedExpenditures = (expenditures) => {
+  return expenditures.filter(item => item.planned_total != 0)
+}
+
 onMounted(() => {
-    const spendedFromPlannedPercentage = expenditures.map(item => Math.ceil(getActualSpendedPercentageFromPLanned(item.planned_total, item.actual_total)))
+    const items =  removeNotPlannedExpenditures(expenditures)
+    const spendedFromPlannedPercentage = items.map(item => Math.ceil(getActualSpendedPercentageFromPLanned(item.planned_total, item.actual_total)))
     series.value = spendedFromPlannedPercentage
     chartOptions.value.labels = expenditures.map(item => item.name)
 })

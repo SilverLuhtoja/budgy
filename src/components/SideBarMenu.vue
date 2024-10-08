@@ -6,19 +6,21 @@ import { useStore } from 'vuex';
 import { processStatment } from '../utils/file_process_script';
 import { Views } from '../stores/store.js'
 import { isEmptyValue, isError, isObjEmpty } from '../utils/helpers.js';
-import paths from '../routes/pathManager.js';
+import pathManager from '../routes/pathManager.js';
 
 const store = useStore();
 const originalFiles = ref([])
 const processedFiles = ref([])
 const fileContent = ref('');
 const processedFilename = ref('')
+
 const isDefaultView  = computed(() => store.getters.currentView ==  Views.DEFAULT)
 const currentSelectedFile  = computed(() => store.getters.currentSelectedFile)
 
 const updateFiles = async () => {
-  originalFiles.value  = sortFilesByMonthsAndYear(await readDirPath(paths.ORIGINAL_FILE_PATH));
-  processedFiles.value  = sortFilesByMonthsAndYear(await readDirPath(paths.PROCESSED_FILE_PATH))
+  await pathManager.initPaths()
+  originalFiles.value  = sortFilesByMonthsAndYear(await readDirPath(pathManager.paths.ORIGINAL_FILE_PATH));
+  processedFiles.value  = sortFilesByMonthsAndYear(await readDirPath(pathManager.paths.PROCESSED_FILE_PATH))
 }
 
 const readFile = async (path, filename) => {
@@ -68,9 +70,7 @@ const processFile = async () => {
 const onClickOutside = e => {
   if (e.target.tagName == "BUTTON" || isEmptyValue(currentSelectedFile.value)) return
 
-  const notProcessedFile = currentSelectedFile.value.split('.').length != 1
   if (!e.target.classList.contains('file') && e.target.classList.contains('side_panel')) {
-    // store.dispatch('setCurrentSelectedFile', '')
     store.dispatch('setViewContent', '')
   }
 };

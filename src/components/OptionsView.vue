@@ -2,7 +2,7 @@
 import { onMounted,ref } from 'vue';
 import { write_file, read_file } from '../utils/rust_file_scripts';
 import { isObjEmpty } from '../utils/helpers';
-import paths from '../routes/pathManager.js'
+import pathManager from '../routes/pathManager.js'
 
 const configurations = ref({})
 const category_name = ref("");
@@ -24,7 +24,7 @@ const onSaveHandler = async () => {
             savedConfigurations[key] = []
         }
     }
-    await write_file(paths.CONFIGURATIONS_FILE_PATH, savedConfigurations)
+    await write_file(pathManager.paths.CONFIGURATIONS_FILE_PATH, savedConfigurations)
     updateExpenditureOptions()
 }
 
@@ -33,7 +33,7 @@ const onExpenditureSaveHandler = () => {
     for (const key of Object.entries(expenditure_configs.value)) {
         savedConfigurations[key[0]] = Number(key[1])
     }
-    write_file(paths.EXPENDITURE_SETTINGS_PATH, savedConfigurations) 
+    write_file(pathManager.paths.EXPENDITURE_SETTINGS_PATH, savedConfigurations) 
 }
 
 const removeCategoryHandler = (category) => {
@@ -48,8 +48,8 @@ const addCategoryHandler = () => {
 }
 
 const updateExpenditureOptions = async () => {
-    let configs = JSON.parse(await read_file(paths.CONFIGURATIONS_FILE_PATH))
-    let expenditures = JSON.parse(await read_file(paths.EXPENDITURE_SETTINGS_PATH))
+    let configs = JSON.parse(await read_file(pathManager.paths.CONFIGURATIONS_FILE_PATH))
+    let expenditures = JSON.parse(await read_file(pathManager.paths.EXPENDITURE_SETTINGS_PATH))
     let new_configs = {}
     
     Object.keys(configs).forEach(key => {
@@ -62,7 +62,7 @@ const updateExpenditureOptions = async () => {
         }
     });
     
-    write_file(paths.EXPENDITURE_SETTINGS_PATH, new_configs) 
+    write_file(pathManager.paths.EXPENDITURE_SETTINGS_PATH, new_configs) 
     expenditure_configs.value = new_configs
 }  
 
@@ -94,7 +94,7 @@ const formatConfigurationValues = () => {
 }
 
 onMounted( async () => {
-    let configs = JSON.parse(await read_file(paths.CONFIGURATIONS_FILE_PATH))
+    let configs = JSON.parse(await read_file(pathManager.paths.CONFIGURATIONS_FILE_PATH))
     configurations.value = configs
     formatConfigurationValues()
     await updateExpenditureOptions()
