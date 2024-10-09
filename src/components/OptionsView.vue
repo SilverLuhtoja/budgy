@@ -116,7 +116,7 @@ onMounted( async () => {
         <div class="flex category" v-for="(value,key) in configurations" :key="key">
             <div v-if="key != 'saved-options'" class="flex center category_key">
                 <div class="category_name flex">
-                    <button class="remove_category_btn" @click="removeCategoryHandler(key)" > - </button>
+                    <button v-if="key != 'INCOME'" class="remove_category_btn" @click="removeCategoryHandler(key)" > - </button>
                     <div class="key"> {{ key }}</div>
                 </div>
                 <textarea  v-model="configurations[key]" class="value">{{value}}</textarea>
@@ -126,8 +126,10 @@ onMounted( async () => {
                     <button class="remove_category_btn" @click="removeCategoryHandler(key)" > - </button>
                     <div>QuickSavedOptions:</div>
                 </div>
-                <div class="saved_option" v-for="item in value.split(',')">
-                    {{ item }}
+                <div class="flex wrap">
+                    <div class="saved_option" v-for="item in value.split(',')">
+                        {{ item }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,6 +155,10 @@ onMounted( async () => {
 
 .flex{
     display: flex;
+}
+
+.wrap{
+    flex-wrap: wrap;
 }
 
 .expenditure_settings, .filter_settings{

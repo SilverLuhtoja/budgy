@@ -28,7 +28,7 @@ export const create_file = async path => {
 
 export const create_empty_json_file = async path => {
   const isCreated = await exists(path);
-  if (!isCreated) return await invoke('write_file', { path: path, content: '{}' });
+  if (!isCreated) return await invoke('write_file', { path: path, content: '{"INCOME": []}' });
 };
 
 export const remove_file = async path => {

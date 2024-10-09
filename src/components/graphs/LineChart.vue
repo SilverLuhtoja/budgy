@@ -6,7 +6,7 @@ const actual_values = ref([])
 const planned_values = ref([])
 const series = ref([
         {
-            name: "Spended this month",
+            name: "Spent this month",
             data: actual_values
         },
         {

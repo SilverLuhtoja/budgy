@@ -6,8 +6,8 @@ import pathManager from '../routes/pathManager.js'
 export const getPlannedSpendingTotal = (total, planned_expending_weight) =>
   total * 0.01 * planned_expending_weight;
 
-export const getActualSpendedPercentageFromPLanned = (planned_total, spended_total) =>
-  (spended_total / planned_total) * 100;
+export const getActualSpentPercentageFromPLanned = (planned_total, spent_total) =>
+  (spent_total / planned_total) * 100;
 
 export const getLastMonthFilename = (currentMonthFilename) => {
   let [currentMonth, year] = extractMonthYear(currentMonthFilename);

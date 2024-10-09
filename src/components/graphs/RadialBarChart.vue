@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineProps, onMounted} from 'vue'
-import { getActualSpendedPercentageFromPLanned } from '../../utils/graph_scripts';
+import { getActualSpentPercentageFromPLanned } from '../../utils/graph_scripts';
 
 const { expenditures } = defineProps(['expenditures'])
 const series = ref([])
@@ -57,15 +57,15 @@ const removeNotPlannedExpenditures = (expenditures) => {
 
 onMounted(() => {
     const items =  removeNotPlannedExpenditures(expenditures)
-    const spendedFromPlannedPercentage = items.map(item => Math.ceil(getActualSpendedPercentageFromPLanned(item.planned_total, item.actual_total)))
-    series.value = spendedFromPlannedPercentage
+    const spentFromPlannedPercentage = items.map(item => Math.ceil(getActualSpentPercentageFromPLanned(item.planned_total, item.actual_total)))
+    series.value = spentFromPlannedPercentage
     chartOptions.value.labels = expenditures.map(item => item.name)
 })
 </script>
 
 <template>
     <main class="pie_chart">
-        <h4 class="graph_title">Spended from total planned percentage</h4>
+        <h4 class="graph_title">Spent from total planned percentage</h4>
         <apexchart type="radialBar" height="390" :options="chartOptions" :series="series"></apexchart>
     </main>
 </template>
