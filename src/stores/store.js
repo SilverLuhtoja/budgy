@@ -3,10 +3,11 @@ import { createStore } from 'vuex';
 export const Views = {
   DEFAULT: 'default',
   OPTIONS: 'options',
-  OVERVIEW: 'overview'
+  OVERVIEW: 'overview',
+  TUTORIAL: 'tutorial',
 }
 
-const ERROR_SECONDS_TIMER = 3
+const ERROR_SECONDS_TIMER = 5
 
 export default createStore({
   state: {

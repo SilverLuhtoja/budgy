@@ -140,7 +140,7 @@ onMounted( async () => {
     <div class="section_divider"></div>
     <section class="expenditure_settings">
         <h3>Expenditure settings</h3>
-        <p> Total: {{ expenditure_total <= 100 ? expenditure_total + "%": "Change values, cant be over 100%" }}  </p>
+        <p v-if="expenditure_total"> Total: {{ expenditure_total <= 100 ? expenditure_total + "%": "Change values, cant be over 100%" }}  </p>
         <div  v-for="key,value in Object.entries(expenditure_configs)" :key="value">
             <div class="flex category">
                 <div class="key"> {{ key[0] }}</div> 
