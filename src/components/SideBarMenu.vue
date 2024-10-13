@@ -106,6 +106,11 @@ onUnmounted(() => {
         <v-icon v-if="store.getters.currentView != Views.OVERVIEW" name="md-removeredeye-outlined" scale="2"  />
         <v-icon v-else name="io-close-sharp" scale="2" />
       </button>
+
+      <button  @click="store.dispatch('setCurrentView', 'tutorial')"> 
+        <v-icon v-if="store.getters.currentView != Views.TUTORIAL" name="bi-question-square" scale="2"  />
+        <v-icon v-else name="io-close-sharp" scale="2" />
+      </button>
     </div>
 
     <section > 

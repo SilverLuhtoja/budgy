@@ -5,6 +5,7 @@ import { Views } from '../stores/store.js'
 import OptionsView from './OptionsView.vue'
 import OverView from './OverView.vue'
 import ProcessedFileView from './ProcessedFileView.vue';
+import TutorialView from './TutorialView.vue';
 
 const store = useStore();
 const currentView = computed(() => store.getters.currentView)
@@ -26,6 +27,9 @@ const content = computed(() => store.getters.viewContent)
         </section>
         <section v-if="currentView == Views.OVERVIEW">
             <OverView />
+        </section>
+        <section v-if="currentView == Views.TUTORIAL">
+            <TutorialView />
         </section>
     </main>
 </template>

@@ -36,14 +36,7 @@
         "scope": [
           "**",
           "**/*",
-          "/**/*",
-          "./resources",
-          "./resources/original_files",
-          "./resources/original_files/*",
-          "./resources/processed_files",
-          "./resources/processed_files/*",
-          "./resources/configurations",
-          "./resources/configurations/*"
+          "/**/*"
         ],
         "writeFile": true
       },
